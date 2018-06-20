@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1697409694217740}
+  m_IsPrefabParent: 1
+--- !u!1 &1697409694217740
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4099753216539002}
+  - component: {fileID: 114049867882202192}
+  - component: {fileID: 114967706772601676}
+  - component: {fileID: 114860049594083796}
+  - component: {fileID: 114116721645995834}
+  - component: {fileID: 114695364146817212}
+  - component: {fileID: 114400422229532086}
+  m_Layer: 0
+  m_Name: Custom Provider Set
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4099753216539002
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697409694217740}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114049867882202192
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697409694217740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a63c09b3267f456398807ec40687d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImuProvider: {fileID: 114695364146817212}
+  GpsProvider: {fileID: 114967706772601676}
+  CameraProvider: {fileID: 114860049594083796}
+  VideoProvider: {fileID: 114116721645995834}
+  LightingProvider: {fileID: 114400422229532086}
+--- !u!114 &114116721645995834
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697409694217740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1795386034, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Platform: 0
+--- !u!114 &114400422229532086
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697409694217740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1243287296, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114695364146817212
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697409694217740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1720617228, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114860049594083796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697409694217740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0180aa1802c49b584b800bd7fc69ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Depth: -1
+  FarClippingPlane: 2000
+  NearClippingPlane: 0.01
+  FOV: 40
+  ProjectionMatrix:
+    e00: 0.6562428
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1.732051
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: -1.0006
+    e23: -0.60018
+    e30: 0
+    e31: 0
+    e32: -1
+    e33: 0
+--- !u!114 &114967706772601676
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697409694217740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88702be461382419580ff9447cf25cb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Latitude: 37.358102
+  Longitude: -121.935913
+  Height: 0

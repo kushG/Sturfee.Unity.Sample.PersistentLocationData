@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1490648947665182}
+  m_IsPrefabParent: 1
+--- !u!1 &1490648947665182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4128538138070218}
+  - component: {fileID: 114744001105226476}
+  - component: {fileID: 114807203229593990}
+  - component: {fileID: 114509720175104338}
+  - component: {fileID: 114907075109809322}
+  - component: {fileID: 114728516585740674}
+  - component: {fileID: 114392019404501876}
+  - component: {fileID: 114467260258368484}
+  m_Layer: 0
+  m_Name: SturfeeXRSession
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4128538138070218
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114392019404501876
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1136721759, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114467260258368484
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -203631202, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114509720175104338
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1243287296, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114728516585740674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -261009974, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114744001105226476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ecc2bff55d764e8bb8bb05c460c17bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Setup: '1. Default" will setup all default providers
+
+    2. ''Custom'' allows you to setup your own set of providers. Some examples available
+    at `Resources/Provider Sets''. Just drag any of them to ''Provider Set'' below'
+  ProviderType: 0
+  ProviderSet: {fileID: 114331972986738736, guid: e4fced37b67c04039aa26599b0949dae,
+    type: 2}
+  ImuProvider: {fileID: 114467260258368484}
+  GpsProvider: {fileID: 114392019404501876}
+  CameraProvider: {fileID: 114728516585740674}
+  VideoProvider: {fileID: 114907075109809322}
+  LightingProvider: {fileID: 114509720175104338}
+  PlayOnStart: 1
+--- !u!114 &114807203229593990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8667f0b7961464195fd9c7c52bf9b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114907075109809322
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1490648947665182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1795386034, guid: 38334c643df614ff1b87f75d8be494a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Platform: 0
