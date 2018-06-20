@@ -13,6 +13,9 @@ using Sturfee.Unity.XR.Providers.Components.Lighting;
 [RequireComponent(typeof(ProviderHandler))]
 public class SturfeeXRSession: MonoBehaviour
 {
+    [HideInInspector]   
+    public int TilesToLoad = 3;     //Not part of release 0.9.3
+
     [HideInInspector]
     public ProviderSet ProviderSet;
     [HideInInspector]
@@ -63,7 +66,9 @@ public class SturfeeXRSession: MonoBehaviour
         SetupDefaultProivders();
 
         var xrConfig = new XRSessionConfig();
-		xrConfig.ImuProvider = ImuProvider;
+        xrConfig.TilesToLoad = TilesToLoad;
+
+        xrConfig.ImuProvider = ImuProvider;
 		xrConfig.GpsProvider = GpsProvider;
 		xrConfig.CameraProvider = CameraProvider;
 		xrConfig.VideoProvider = VideoProvider;

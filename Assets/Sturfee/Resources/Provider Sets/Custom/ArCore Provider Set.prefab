@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4628199868688712}
   - component: {fileID: 114331972986738736}
   - component: {fileID: 114777686046989892}
-  - component: {fileID: 114255999657830364}
   - component: {fileID: 114113244393827174}
   - component: {fileID: 114466467233613168}
   - component: {fileID: 114538022146570922}
@@ -120,22 +119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b6ecbc80d4b94605ac6d37051812044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114255999657830364
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1473601439285364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1742909100, guid: ed7343f30e3843b3afda8f8b02669cea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Device: 0
-  m_PoseSource: 6
-  m_TrackingType: 0
-  m_UpdateType: 2
-  m_UseRelativeTransform: 1
 --- !u!114 &114331972986738736
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -209,4 +192,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SessionConfig: {fileID: 11400000, guid: 9586a84d6c32f46b6ab7aeb6042f160d, type: 2}
-  ConnectOnAwake: 0

@@ -1,7 +1,7 @@
 ﻿Copyright (c) 2018, Sturfee Inc.
 
 Sturfee StreetAR SDK
-version 0.9.1
+version 0.9.2.3 BETA
 
 The StreetAR SDK provides functionality for building immersive outdoor AR experiences. 
 Using Sturfee's proprietary Visual Processing System (VPS), the SDK can provide precise localization (position and orientation) through imagery from the device camera.

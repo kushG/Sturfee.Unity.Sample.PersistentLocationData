@@ -139,4 +139,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScaleByDistance: 1
-  ApplyFadingEffect: 1
+  ApplyFadingEffect: 0

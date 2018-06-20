@@ -34,6 +34,8 @@ typedef enum : unsigned int {
 class SFLogger {
 public:
     static SFLogger& current();
+    static constexpr bool shouldIncludeLogs = false;
+    static constexpr bool shouldLogLevel(const LogLevel level);
     
     std::string logTag;
     
@@ -45,7 +47,9 @@ public:
     void warn(std::string message);
     void debug(std::string message);
     void error(std::string message);
-    void write(std::string message, LogLevel level);
+    
+    template <LogLevel L>
+    void write(std::string message);
 };
 
 #endif /* SFLogger_hpp */

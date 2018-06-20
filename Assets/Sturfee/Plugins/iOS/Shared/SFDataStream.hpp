@@ -69,11 +69,9 @@ SFDataStreamBuffer<Char, Traits>::showmanyc() {
 template <typename Char, typename Traits>
 std::streamsize
 SFDataStreamBuffer<Char, Traits>::xsgetn(char_type* p, std::streamsize n) {
-	//std::streamsize result = std::min(n, (this->egptr() - this->gptr()));
-	//std::streamsize result = std::min(n, static_cast<std::streamsize>(this->egptr() - this->gptr()));
 	std::streamsize result = std::min<std::streamsize>(n, (this->egptr() - this->gptr()));
     std::copy(this->gptr(), this->gptr() + result, p);
-    this->gbump(result);
+    this->gbump((int)result);
     return result;
 }
 

@@ -17,6 +17,11 @@ public class GroundPlane : MonoBehaviour {
         SturfeeEventManager.Instance.OnSessionReady += OnSessionReady;
     }
 
+    private void OnDestroy()
+    {
+        SturfeeEventManager.Instance.OnSessionReady -= OnSessionReady;
+    }
+
     private void OnSessionReady ()
     {
         StartCoroutine(AddGroundAsync());

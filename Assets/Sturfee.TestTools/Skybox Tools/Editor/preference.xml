@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SkyBoxPreference xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <apiKey>AIzaSyAEheVF3RUYHNo4TxlwVmN4L6VnHK7uz9k</apiKey>
+  <skyBoxName>SJC-1</skyBoxName>
+  <directory>Assets/SturfeeTestTools/Skybox Tools/Static Skybox/Skyboxes</directory>
+  <latitude>37.3310936395765</latitude>
+  <longitude>-121.888289663857</longitude>
+  <imgSize>640</imgSize>
+</SkyBoxPreference>

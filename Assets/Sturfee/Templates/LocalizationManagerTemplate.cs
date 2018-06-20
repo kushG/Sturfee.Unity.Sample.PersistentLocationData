@@ -66,10 +66,6 @@ namespace Sturfee.Unity.XR.Package.Templates
         private void OnSessionReady()
         {
 			_sessionIsReady = true;
-
-            // once the XR Sessions is ready, we need to make sure the user's location is in a supported coverage city/area
-            // refer to: https://sturfee.com/faq.html#cities
-            XRSessionManager.GetSession().CheckAlignment();
         }
 
         private void OnSessionFailed (string error)
@@ -82,7 +78,7 @@ namespace Sturfee.Unity.XR.Package.Templates
 
         private void OnCoverageCheck(bool result)
         {
-            // This event is fired after the server has responded to the 'CheckAlignment()' call
+            // This event is fired after the server has responded to the 'PerformLocalization()' call
 
             if (result == false)
             {
@@ -105,13 +101,13 @@ namespace Sturfee.Unity.XR.Package.Templates
 
         private void OnLocalizationLoading ()
 		{
-            // This event is fired when the localization process has been started from the `PerformAlignment()` call
+            // This event is fired when the localization process has been started from the `PerformLocalization()` call
             Debug.Log("Localization in progress...");
 		}
 
         private void OnLocalizationComplete (Core.Constants.Enums.AlignmentStatus status)
         {
-            // This event is fired when the server responds to a localization request via `PerformAlignment()` call
+            // This event is fired when the server responds to a localization request via `PerformLocalization()` call
             if (status == Core.Constants.Enums.AlignmentStatus.Done)
             {
                 Debug.Log("Localization Complete");

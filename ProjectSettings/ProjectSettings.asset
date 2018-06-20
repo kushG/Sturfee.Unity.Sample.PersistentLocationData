@@ -12,7 +12,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Sturfee
-  productName: GPS PG
+  productName: Persistent Data
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -158,7 +158,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.sturfee.gpspg
+    Android: com.sturfee.persistentgps
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 24
@@ -552,7 +552,7 @@ PlayerSettings:
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
     1: 
-    4: EVERYPLAY_ANDROID;STURFEE_ARCORE
+    4: EVERYPLAY_IPHONE;EVERYPLAY_ANDROID;STURFEE_ARCORE
     7: EVERYPLAY_ANDROID;STURFEE_ARCORE
     13: EVERYPLAY_ANDROID;STURFEE_ARCORE
     25: 

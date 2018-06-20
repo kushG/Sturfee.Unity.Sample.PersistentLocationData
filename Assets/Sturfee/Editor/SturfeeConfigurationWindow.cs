@@ -22,7 +22,9 @@ public class SturfeeConfigurationWindow : EditorWindow
     public MonoScript source;
     public static int OpenToSection = 0;
 
+
     string _apiKey = "N/A";
+    //string _spatialRefGps = "";
     private int MemCacheLimit
     {
         set
@@ -83,7 +85,7 @@ public class SturfeeConfigurationWindow : EditorWindow
     private string _providerSetName;
     private bool _displayEmptyNameError;
 
-    [MenuItem("Sturfee/Configure")]
+    [MenuItem("Sturfee/Configure", false, 0)]
     public static void ShowWindow()
     {
         _configurationFile = Path.Combine(Paths.SturfeeResourcesAbsolute, Paths.ConfigFile);
@@ -339,6 +341,27 @@ public class SturfeeConfigurationWindow : EditorWindow
 
                     EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
+                    #region Spatial Transform
+                    //EditorGUILayout.BeginVertical();
+                    //{
+                    //    EditorGUILayout.BeginHorizontal();           
+                    //    EditorGUILayout.PrefixLabel("Spatial Mode (Lat, Long)");
+                    //    _spatialRefGps = EditorGUILayout.TextField(_spatialRefGps);
+                    //    EditorGUILayout.EndHorizontal();
+                    //    if(_config.SpatialRefGps != _spatialRefGps)
+                    //    {
+                    //        Debug.Log("GPS Saved");
+                    //        SaveConfiguration();
+                    //    }
+                    //}
+                    //EditorGUILayout.EndVertical();
+
+                    //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+                    #endregion
+
+
+
                     EditorGUILayout.BeginVertical();
                     {
                         GUILayout.Label("Custom XR Session Providers", EditorStyles.boldLabel);
@@ -439,7 +462,8 @@ public class SturfeeConfigurationWindow : EditorWindow
         {
             AccessToken = _apiKey,
             FileCacheLimit = _fileCacheLimit,
-            MemoryCacheLimit = _memCacheLimit
+            MemoryCacheLimit = _memCacheLimit,
+            //SpatialRefGps = _spatialRefGps                
         };
 
         var json = JsonUtility.ToJson(configuration);
@@ -478,12 +502,14 @@ public class SturfeeConfigurationWindow : EditorWindow
         if (_config != null)
         {
             _apiKey = _config.AccessToken;
+            //_spatialRefGps = _config.SpatialRefGps;
             _loadingSubscription = true;
             //CheckSubscription(_apiKey, HandleSubscriptionResult); // validates against the server
             var subscriptionInfo = SturfeeSubscriptionManager.GetSubscriptionInfo(_apiKey); // local
             HandleSubscriptionResult(subscriptionInfo);
         }
     }
+
 
     private GUISkin BuildSturfeeSkin()
     {
@@ -982,3 +1008,10 @@ public class SturfeeConfigurationWindow : EditorWindow
         //_www.SendWebRequest();
     }
 }
+
+
+
+
+
+
+

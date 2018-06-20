@@ -145,6 +145,11 @@
             The user may be indoors
             </summary>
         </member>
+        <member name="F:Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.OutOfCoverage">
+            <summary>
+            The user is out of coverage area of VPS.
+            </summary>
+        </member>
         <member name="T:Sturfee.Unity.XR.Core.Constants.Enums.HitScanStatus">
             <summary>
             Status codes for alignment
@@ -211,6 +216,41 @@
             </summary>
         </member>
         <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnTileLoaded">
+            <summary>
+            Fires when tile data has been loaded into the scene
+            </summary>
+        </member>
+        <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnLocalizationComplete_Internal">
+            <summary>
+            Fires after the alignment finishes.
+            </summary>
+        </member>
+        <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnLocalizationLoading_Internal">
+            <summary>
+            Fires when alignment request is made.
+            </summary>
+        </member>
+        <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnDetectSurfacePointComplete_Internal">
+            <summary>
+            Fires after hitscan finishes with a target.
+            </summary>
+        </member>
+        <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnDetectSurfacePointLoading_Internal">
+            <summary>
+            Fires after hitscan request is made.
+            </summary>
+        </member>
+        <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnDetectSurfacePointFailed_Internal">
+            <summary>
+            Fires when hitscan request doesn't hit any object
+            </summary>
+        </member>
+        <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnCoverageCheckComplete_Internal">
+            <summary>
+            Fires when Alignmnet Check request is complete
+            </summary>
+        </member>
+        <member name="E:Sturfee.Unity.XR.Core.Events.SturfeeEventManager.OnTileLoaded_Internal">
             <summary>
             Fires when tile data has been loaded into the scene
             </summary>
@@ -329,6 +369,11 @@
         <member name="T:Sturfee.Unity.XR.Core.Session.XRSessionManager">
             <summary>
             The primary interface for Sturfee XR Session
+            </summary>
+        </member>
+        <member name="F:Sturfee.Unity.XR.Core.Session.XRSessionManager.TilesToLoad">
+            <summary>
+            The number of tiles to load when initializing (default is 3 which means 3x3=9 tiles)
             </summary>
         </member>
         <member name="M:Sturfee.Unity.XR.Core.Session.XRSessionManager.GetSession">

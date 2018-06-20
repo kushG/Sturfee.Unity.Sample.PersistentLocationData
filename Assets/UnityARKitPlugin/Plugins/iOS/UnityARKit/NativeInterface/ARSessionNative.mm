@@ -111,6 +111,7 @@ typedef struct
     UnityARMatrix4x4 transform;
     UnityARFaceGeometry faceGeometry;
     void *blendShapes;  //NSDictionary<ARBlendShapeLocation, NSNumber*> *
+    uint32_t isTracked;
 } UnityARFaceAnchorData;
 
 typedef struct
@@ -233,6 +234,19 @@ static NSUInteger s_PointCloudSize;
 static float unityCameraNearZ;
 static float unityCameraFarZ;
 
+static inline bool UnityIsARKit_1_5_Supported()
+{
+    if ([ARImageAnchor class])
+    {
+        return true;
+    }
+    else
+    {
+        return  false;
+    }
+}
+
+
 static inline ARWorldAlignment GetARWorldAlignmentFromUnityARAlignment(UnityARAlignment& unityAlignment)
 {
     switch (unityAlignment)
@@ -308,10 +322,14 @@ inline void GetARSessionConfigurationFromARKitWorldTrackingSessionConfiguration(
     appleConfig.planeDetection = GetARPlaneDetectionFromUnityARPlaneDetection(unityConfig.planeDetection);
     appleConfig.worldAlignment = GetARWorldAlignmentFromUnityARAlignment(unityConfig.alignment);
     appleConfig.lightEstimationEnabled = (BOOL)unityConfig.enableLightEstimation;
-    appleConfig.autoFocusEnabled = (BOOL) unityConfig.enableAutoFocus;
-    if (unityConfig.ptrVideoFormat != NULL)
+    
+    if (UnityIsARKit_1_5_Supported())
     {
-        appleConfig.videoFormat = (__bridge ARVideoFormat*) unityConfig.ptrVideoFormat;
+        appleConfig.autoFocusEnabled = (BOOL) unityConfig.enableAutoFocus;
+        if (unityConfig.ptrVideoFormat != NULL)
+        {
+            appleConfig.videoFormat = (__bridge ARVideoFormat*) unityConfig.ptrVideoFormat;
+        }
     }
 }
 
@@ -416,7 +434,11 @@ inline void UnityARAnchorDataFromARAnchorPtr(UnityARAnchorData& anchorData, ARPl
     anchorData.extent.x = nativeAnchor.extent.x;
     anchorData.extent.y = nativeAnchor.extent.y;
     anchorData.extent.z = nativeAnchor.extent.z;
-    UnityARPlaneGeometryFromARPlaneGeometry(anchorData.planeGeometry, nativeAnchor.geometry);
+    
+    if (UnityIsARKit_1_5_Supported())
+    {
+        UnityARPlaneGeometryFromARPlaneGeometry(anchorData.planeGeometry, nativeAnchor.geometry);
+    }
 }
 
 inline void UnityARMatrix4x4FromCGAffineTransform(UnityARMatrix4x4& outMatrix, CGAffineTransform displayTransform, BOOL isLandscape)
@@ -451,6 +473,7 @@ inline void UnityARUserAnchorDataFromARAnchorPtr(UnityARUserAnchorData& anchorDa
     ARKitMatrixToUnityARMatrix4x4(nativeAnchor.transform, &anchorData.transform);
 }
 
+
 #if ARKIT_USES_FACETRACKING
 inline void UnityARFaceGeometryFromARFaceGeometry(UnityARFaceGeometry& faceGeometry, ARFaceGeometry *arFaceGeometry)
 {
@@ -468,6 +491,7 @@ inline void UnityARFaceAnchorDataFromARFaceAnchorPtr(UnityARFaceAnchorData& anch
     ARKitMatrixToUnityARMatrix4x4(nativeAnchor.transform, &anchorData.transform);
     UnityARFaceGeometryFromARFaceGeometry(anchorData.faceGeometry, nativeAnchor.geometry);
     anchorData.blendShapes = (__bridge void *) nativeAnchor.blendShapes;
+    anchorData.isTracked = (uint32_t) nativeAnchor.isTracked;
 }
 #endif
 
@@ -817,7 +841,7 @@ static CGAffineTransform s_CurAffineTransform;
             memcpy(s_UnityPixelBuffers.pUVPixelBytes, baseAddress, numBytes);
         }
         
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
     }
     
     id<MTLTexture> textureY = nil;
@@ -1019,15 +1043,18 @@ extern "C" void session_SetFaceAnchorCallbacks(const void* session, UNITY_AR_FAC
 }
 
 extern "C" void session_SetImageAnchorCallbacks(const void* session, UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorAddedCallback,
-                                               UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorUpdatedCallback,
-                                               UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorRemovedCallback)
+                                                UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorUpdatedCallback,
+                                                UNITY_AR_IMAGE_ANCHOR_CALLBACK imageAnchorRemovedCallback)
 {
-    UnityARSession* nativeSession = (__bridge UnityARSession*)session;
-    UnityARImageAnchorCallbackWrapper* imageAnchorCallbacks = [[UnityARImageAnchorCallbackWrapper alloc] init];
-    imageAnchorCallbacks->_anchorAddedCallback = imageAnchorAddedCallback;
-    imageAnchorCallbacks->_anchorUpdatedCallback = imageAnchorUpdatedCallback;
-    imageAnchorCallbacks->_anchorRemovedCallback = imageAnchorRemovedCallback;
-    [nativeSession->_classToCallbackMap setObject:imageAnchorCallbacks forKey:[ARImageAnchor class]];
+    if (UnityIsARKit_1_5_Supported())
+    {
+        UnityARSession* nativeSession = (__bridge UnityARSession*)session;
+        UnityARImageAnchorCallbackWrapper* imageAnchorCallbacks = [[UnityARImageAnchorCallbackWrapper alloc] init];
+        imageAnchorCallbacks->_anchorAddedCallback = imageAnchorAddedCallback;
+        imageAnchorCallbacks->_anchorUpdatedCallback = imageAnchorUpdatedCallback;
+        imageAnchorCallbacks->_anchorRemovedCallback = imageAnchorRemovedCallback;
+        [nativeSession->_classToCallbackMap setObject:imageAnchorCallbacks forKey:[ARImageAnchor class]];
+    }
 }
 
 extern "C" void StartWorldTrackingSessionWithOptions(void* nativeSession, ARKitWorldTrackingSessionConfiguration unityConfig, UnityARSessionRunOptions runOptions)
@@ -1039,13 +1066,13 @@ extern "C" void StartWorldTrackingSessionWithOptions(void* nativeSession, ARKitW
     session->_getPointCloudData = (BOOL) unityConfig.getPointCloudData;
     session->_getLightEstimation = (BOOL) unityConfig.enableLightEstimation;
     
-    if(unityConfig.arResourceGroup != NULL && strlen(unityConfig.arResourceGroup) > 0)
+    if(UnityIsARKit_1_5_Supported() && unityConfig.arResourceGroup != NULL && strlen(unityConfig.arResourceGroup) > 0)
     {
         NSString *strResourceGroup = [[NSString alloc] initWithUTF8String:unityConfig.arResourceGroup];
         NSSet<ARReferenceImage *> *referenceImages = [ARReferenceImage referenceImagesInGroupNamed:strResourceGroup bundle:nil];
         config.detectionImages = referenceImages;
     }
-
+    
     [session->_session runWithConfiguration:config options:runOpts ];
     [session setupMetal];
 }
@@ -1060,13 +1087,13 @@ extern "C" void StartWorldTrackingSession(void* nativeSession, ARKitWorldTrackin
     session->_getPointCloudData = (BOOL) unityConfig.getPointCloudData;
     session->_getLightEstimation = (BOOL) unityConfig.enableLightEstimation;
     
-    if(unityConfig.arResourceGroup != NULL && strlen(unityConfig.arResourceGroup) > 0)
+    if(UnityIsARKit_1_5_Supported() && unityConfig.arResourceGroup != NULL && strlen(unityConfig.arResourceGroup) > 0)
     {
         NSString *strResourceGroup = [[NSString alloc] initWithUTF8String:unityConfig.arResourceGroup];
         NSSet<ARReferenceImage *> *referenceImages = [ARReferenceImage referenceImagesInGroupNamed:strResourceGroup bundle:nil];
         config.detectionImages = referenceImages;
     }
-
+    
     [session->_session runWithConfiguration:config];
     [session setupMetal];
 }
@@ -1159,10 +1186,13 @@ extern "C" void SessionRemoveUserAnchor(void* nativeSession, const char * anchor
 
 extern "C" void SessionSetWorldOrigin(void* nativeSession, UnityARMatrix4x4 worldMatrix)
 {
-    UnityARSession* session = (__bridge UnityARSession*)nativeSession;
-    matrix_float4x4 arWorldMatrix;
-    UnityARMatrix4x4ToARKitMatrix(worldMatrix, &arWorldMatrix);
-    [session->_session setWorldOrigin:arWorldMatrix];
+    if (UnityIsARKit_1_5_Supported())
+    {
+        UnityARSession* session = (__bridge UnityARSession*)nativeSession;
+        matrix_float4x4 arWorldMatrix;
+        UnityARMatrix4x4ToARKitMatrix(worldMatrix, &arWorldMatrix);
+        [session->_session setWorldOrigin:arWorldMatrix];
+    }
 }
 
 extern "C" void SetCameraNearFar (float nearZ, float farZ)
@@ -1282,15 +1312,23 @@ extern "C" bool IsARKitSessionConfigurationSupported()
 
 extern "C" void EnumerateVideoFormats(UNITY_AR_VIDEOFORMAT_CALLBACK videoFormatCallback)
 {
-    for(ARVideoFormat* arVideoFormat in ARWorldTrackingConfiguration.supportedVideoFormats)
+    if (UnityIsARKit_1_5_Supported())
     {
-        UnityARVideoFormat videoFormat;
-        videoFormat.ptrVideoFormat = (__bridge void *)arVideoFormat;
-        videoFormat.imageResolutionWidth = arVideoFormat.imageResolution.width;
-        videoFormat.imageResolutionHeight = arVideoFormat.imageResolution.height;
-        videoFormat.framesPerSecond = arVideoFormat.framesPerSecond;
-        videoFormatCallback(videoFormat);
+        for(ARVideoFormat* arVideoFormat in ARWorldTrackingConfiguration.supportedVideoFormats)
+        {
+            UnityARVideoFormat videoFormat;
+            videoFormat.ptrVideoFormat = (__bridge void *)arVideoFormat;
+            videoFormat.imageResolutionWidth = arVideoFormat.imageResolution.width;
+            videoFormat.imageResolutionHeight = arVideoFormat.imageResolution.height;
+            videoFormat.framesPerSecond = arVideoFormat.framesPerSecond;
+            videoFormatCallback(videoFormat);
+        }
     }
+}
+
+extern "C" bool Native_IsARKit_1_5_Supported()
+{
+    return UnityIsARKit_1_5_Supported();
 }
 
 extern "C" bool IsARKitFaceTrackingConfigurationSupported()

@@ -52,20 +52,25 @@ namespace Sturfee.Unity.XR.Package.Utilities
 
         private void Update()
         {
-			if (!_sessionIsReady) 
-			{
-				return;
-			}
+			//if (!_sessionIsReady) 
+			//{
+			//	return;
+			//}
 
-            if (ScreenOrientationHelper.Instance.OrientationChanged || (!LandscapeCanvas.isActiveAndEnabled && !PortraitCanvas.isActiveAndEnabled))
-            {
-                UpdateOrientation();
-            }
+            //if (ScreenOrientationHelper.Instance.OrientationChanged || (!LandscapeCanvas.isActiveAndEnabled && !PortraitCanvas.isActiveAndEnabled))
+            //{
+            //    UpdateOrientation();
+            //}
 
             if (Input.GetMouseButtonDown(0)) 
             {
                 XRSessionManager.GetSession().DetectSurfaceAtPoint(Input.mousePosition);               
             }
+        }
+
+        public void OnQuitButton()
+        {
+            Application.Quit();
         }
 
         #region XR SESSION
@@ -76,7 +81,7 @@ namespace Sturfee.Unity.XR.Package.Utilities
             //Uncomment this once portrait mode is supported
             //UpdateOrientation();
 
-            XRSessionManager.GetSession().CheckCoverage();
+            LandscapeCanvas.gameObject.SetActive(true);
         }
 
         private void OnSessionFailed (string error)
@@ -92,8 +97,6 @@ namespace Sturfee.Unity.XR.Package.Utilities
                 return;
             }
 
-			LandscapeCanvas.gameObject.SetActive(true);
-
             Debug.Log("Localization available");
         }
         #endregion
@@ -107,18 +110,32 @@ namespace Sturfee.Unity.XR.Package.Utilities
         private void OnLocalizationLoading()
         {
             //ToastManager.Instance.ShowToast("Alignment in progress...");
-            ScanAnimation.SetActive(true);
+            if(ScanAnimation != null)
+            {
+                ScanAnimation.SetActive(true);
+            }
         }
 
         private void OnLocalizationComplete (Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus status)
-        {			
-            QuitButton.SetActive(true);
+        {
+            if (QuitButton != null)
+            {
+                QuitButton.SetActive(true);
+            }
+
+            if (ScanAnimation != null)
+            {
+                ScanAnimation.SetActive(false);
+            }
 
             if (status == Core.Constants.Enums.AlignmentStatus.Done)
             {
                 Debug.Log ("Localization Complete");
                 ToastManager.Instance.ShowToast("Tap anywhere to place planes");
-                ScanAnimation.SetActive(false);
+            }
+            else if (status == Core.Constants.Enums.AlignmentStatus.OutOfCoverage)
+            {
+                ToastManager.Instance.ShowToastTimed("Localization not available at this location");
             }
             else if (status == Core.Constants.Enums.AlignmentStatus.IndoorsError)
             {

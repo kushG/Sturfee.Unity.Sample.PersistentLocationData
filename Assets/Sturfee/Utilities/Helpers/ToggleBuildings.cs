@@ -1,9 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Sturfee.Unity.XR.Core.Session;
-using Sturfee.Unity.XR.Core.Events;
-using Sturfee.Unity.XR.Package.Utilities;
 
 namespace Sturfee.Unity.XR.Package.Utilities
 {

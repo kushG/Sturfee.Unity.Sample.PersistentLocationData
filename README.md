@@ -57,8 +57,8 @@ Go to [Mapbox.com](https://mapbox.com) and [Sturfee.com](https://sturfee.com) an
 14. Make sure you have several objects placed in the scene, and then close the app.
 15. Move to a new location not too far, in range of view of where you placed the objects in the physical world.
 16. Reopen the app, you should now see 2 options, to either load your previous game, or start a new game. Choose 'Load Game'
-17. Go through the localization process just as you did before, and notice the objects you placed to be just where you left them, despite yourself having moved and restarted the app. 
-18. You can open the map view to be able to see where items are placed for several blocks. If you place objects in entirely different areas, this map is not setup to view items too far away from your localization point, but if you localize back near the original location, you will be able to see them on the map again.
+17. Go through the localization process just as you did before. Assuming the alignment is correct, you should notice the objects you placed to be in the same location that you left them, despite yourself having moved and restarted the app. If alignment is incorrect, you should still notice that the items are in the same location in the map view. 
+18. You can open the map view to be able to see where items are placed for several blocks. If you place objects in entirely different areas, this map is not setup to view items too far away from your localization point, but if you localize back near the original location, you will be able to see the items on the map again.
 
 
 ___
