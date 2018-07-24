@@ -4,7 +4,7 @@ using UnityEngine.XR.iOS;
 using System.Text;
 using System.Collections.Generic;
 
-namespace UnityEngine.XR.iOS.Utils
+namespace Utils
 {
 	/// <summary>
 	/// Since unity doesn't flag the Vector4 as serializable, we
@@ -529,15 +529,13 @@ namespace UnityEngine.XR.iOS.Utils
 		public serializableFaceGeometry faceGeometry;
 		public Dictionary<string, float> arBlendShapes;
 		public byte[] identifierStr;
-		public bool isTracked;
 
-		public serializableUnityARFaceAnchor( serializableUnityARMatrix4x4 wt, serializableFaceGeometry fg, Dictionary<string, float> bs, byte [] idstr, bool bIsTracked)
+		public serializableUnityARFaceAnchor( serializableUnityARMatrix4x4 wt, serializableFaceGeometry fg, Dictionary<string, float> bs, byte [] idstr)
 		{
 			worldTransform = wt;
 			faceGeometry = fg;
 			arBlendShapes = bs;
 			identifierStr = idstr;
-			isTracked = bIsTracked;
 		}
 
 
@@ -552,7 +550,7 @@ namespace UnityEngine.XR.iOS.Utils
 			serializableUnityARMatrix4x4 wt = rValue.transform;
 			serializableFaceGeometry sfg = rValue.faceGeometry;
 			byte[] idstr = Encoding.UTF8.GetBytes (rValue.identifierStr);
-			return new serializableUnityARFaceAnchor(wt, sfg, rValue.blendShapes, idstr, rValue.isTracked);
+			return new serializableUnityARFaceAnchor(wt, sfg, rValue.blendShapes, idstr);
 		}
 		#endif
 	};

@@ -48,7 +48,7 @@ namespace UnityEngine.XR.iOS
 			bCommandBufferInitialized = false;
 		}
 
-#if !UNITY_EDITOR && UNITY_IOS
+#if !UNITY_EDITOR
 
         public void OnPreRender()
         {

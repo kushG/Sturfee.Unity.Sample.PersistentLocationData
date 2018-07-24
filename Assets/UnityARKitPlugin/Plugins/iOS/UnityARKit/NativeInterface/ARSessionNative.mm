@@ -111,7 +111,6 @@ typedef struct
     UnityARMatrix4x4 transform;
     UnityARFaceGeometry faceGeometry;
     void *blendShapes;  //NSDictionary<ARBlendShapeLocation, NSNumber*> *
-    uint32_t isTracked;
 } UnityARFaceAnchorData;
 
 typedef struct
@@ -491,7 +490,6 @@ inline void UnityARFaceAnchorDataFromARFaceAnchorPtr(UnityARFaceAnchorData& anch
     ARKitMatrixToUnityARMatrix4x4(nativeAnchor.transform, &anchorData.transform);
     UnityARFaceGeometryFromARFaceGeometry(anchorData.faceGeometry, nativeAnchor.geometry);
     anchorData.blendShapes = (__bridge void *) nativeAnchor.blendShapes;
-    anchorData.isTracked = (uint32_t) nativeAnchor.isTracked;
 }
 #endif
 
@@ -841,7 +839,7 @@ static CGAffineTransform s_CurAffineTransform;
             memcpy(s_UnityPixelBuffers.pUVPixelBytes, baseAddress, numBytes);
         }
         
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     }
     
     id<MTLTexture> textureY = nil;

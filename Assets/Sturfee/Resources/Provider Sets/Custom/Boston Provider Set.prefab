@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Latitude: 42.358957
-  Longitude: 71.056963
+  Longitude: -71.056963
   Height: 0
 --- !u!114 &114410413910692092
 MonoBehaviour:

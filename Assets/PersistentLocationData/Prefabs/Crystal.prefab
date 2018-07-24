@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 23785706577948882}
   - component: {fileID: 64216797080313308}
   m_Layer: 12
-  m_Name: Crystal
+  m_Name: MapSphere
   m_TagString: Crystal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

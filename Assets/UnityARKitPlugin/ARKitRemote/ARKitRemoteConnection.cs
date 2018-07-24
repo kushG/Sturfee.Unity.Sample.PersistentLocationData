@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking.PlayerConnection;
 using System.Text;
-using UnityEngine.XR.iOS.Utils; 
+using Utils; 
 
 #if UNITY_EDITOR
  

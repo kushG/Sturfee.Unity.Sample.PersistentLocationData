@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sturfee.Unity.XR.Core.Events;
 using Sturfee.Unity.XR.Core.Session;
+using Sturfee.Unity.XR.Package.Utilities;
 
 // Checks for and loads save game data, and handles camera localization
 public class GameManager : MonoBehaviour {
@@ -49,34 +50,40 @@ public class GameManager : MonoBehaviour {
 		}
 		else
 		{
-			ScreenMessageController.Instance.SetText ("Connecting...");
+			ScreenMessageController.Instance.SetText ("Initializing Session...");
 		}
 	}
 
 	public void OnStartScreenButtonClick(bool loadGame)
 	{
+
 		_loadGame = loadGame;
 		HasSaveDataPanel.SetActive (false);
 
-		string scanButtonText = ScanButton.GetComponentInChildren<Text>().text;
+		string scanButtonText;// = ScanButton.GetComponentInChildren<Text>().text;
 		if (loadGame)
 		{
 			SaveLoadManager.Load ();
-			ScanButton.GetComponentInChildren<Text>().text = "Scan (Load Game)";
+			scanButtonText = "Scan (Load Game)";
+//			ScanButton.GetComponentInChildren<Text>().text = "Scan (Load Game)";
 		}
 		else
 		{
-			ScanButton.GetComponentInChildren<Text>().text = "Scan (New Game)";
+			scanButtonText = "Scan (New Game)";
+//			ScanButton.GetComponentInChildren<Text>().text = "Scan (New Game)";
 		}
-			
+//		AlignmentManager.Instance.
+		ScanButton.GetComponentInChildren<Text> ().text = scanButtonText;
+
 		if (_sessionReady)
 		{
 			BackButton.SetActive (true);
+//			AlignmentManager.Instance.
 			ScanButton.SetActive (true);
 		}
 		else
 		{
-			ScreenMessageController.Instance.SetText ("Connecting...");
+			ScreenMessageController.Instance.SetText ("Initializing Session...");
 		}
 	}
 
@@ -84,8 +91,12 @@ public class GameManager : MonoBehaviour {
 	{
 		ScreenMessageController.Instance.SetText ("Aligning Camera...");
 		BackButton.SetActive (false);
-		AlignmentInstrText.SetActive (true);
-		XRSessionManager.GetSession ().PerformLocalization ();
+
+		MultiframeManager.Instance.OnScanButtonClick ();
+//		AlignmentManager.Instance.Capture ();
+
+//		AlignmentInstrText.SetActive (true);
+//		XRSessionManager.GetSession ().PerformLocalization ();
 	}
 
 	// Sturfee event called when the Sturfee XR Session is ready to be used
@@ -96,6 +107,7 @@ public class GameManager : MonoBehaviour {
 		_sessionReady = true;
 		if (!HasSaveDataPanel.activeSelf)
 		{
+//			AlignmentManager.Instance.
 			ScanButton.SetActive (true);
 
 			if (_hasSaveData)

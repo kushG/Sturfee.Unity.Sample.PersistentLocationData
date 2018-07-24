@@ -17,10 +17,11 @@ public class SturfeeProviderWindow : Editor
         Object[] defaultSets = Resources.LoadAll("Provider Sets/Default");
         Object[] customSets = Resources.LoadAll("Provider Sets/Custom");
         Object[] testToolSets = Resources.LoadAll("Provider Sets/Test Tools");
+        Object[] footageSets = Resources.LoadAll("Provider Sets/Footage");
 
-        ProviderSet = new string[defaultSets.Length + customSets.Length + testToolSets.Length + 1];
+        ProviderSet = new string[defaultSets.Length + customSets.Length + testToolSets.Length + footageSets.Length + 1];
 
-        for (int i = 0; i < defaultSets.Length + customSets.Length + testToolSets.Length; i++)
+        for (int i = 0; i < defaultSets.Length + customSets.Length + testToolSets.Length + footageSets.Length; i++)
         {
             if (i < defaultSets.Length)
             {
@@ -30,10 +31,15 @@ public class SturfeeProviderWindow : Editor
             {
                 ProviderSet[i] = "Custom/" + customSets[i - defaultSets.Length].name;
             }
-            else
+            else if(i < defaultSets.Length + customSets.Length + testToolSets.Length)
             {
                 ProviderSet[i] = "Test Tools/" + testToolSets[i - defaultSets.Length - customSets.Length].name;
             }
+            else
+            {
+                ProviderSet[i] = "Footage/" + footageSets[i - defaultSets.Length - customSets.Length - testToolSets.Length].name;
+            }
+
         }
             
         ProviderSet[ProviderSet.Length - 1] = "Add New";

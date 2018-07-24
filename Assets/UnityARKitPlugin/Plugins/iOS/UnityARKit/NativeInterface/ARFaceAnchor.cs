@@ -90,11 +90,10 @@ namespace UnityEngine.XR.iOS
 
 		public UnityARFaceGeometry faceGeometry;
 		public IntPtr blendShapes;
-		public bool isTracked;   //this is from the new ARTrackable protocol that ARFaceAnchor now subscribes to
 
 	};
 
-	#if !UNITY_EDITOR && UNITY_IOS
+	#if !UNITY_EDITOR
 	public class ARFaceGeometry
 	{
 		private UnityARFaceGeometry uFaceGeometry;
@@ -183,8 +182,6 @@ namespace UnityEngine.XR.iOS
 		
 
 		public string identifierStr { get { return faceAnchorData.identifierStr; } }
-
-		public bool isTracked { get { return faceAnchorData.isTracked; } }
 
 		public Matrix4x4 transform { 
 			get { 

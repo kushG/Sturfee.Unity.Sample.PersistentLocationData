@@ -1,4 +1,5 @@
-﻿using Sturfee.Unity.XR.Core.Events;
+﻿using System.Collections;
+using Sturfee.Unity.XR.Core.Events;
 using Sturfee.Unity.XR.Core.Session;
 using UnityEngine;
 
@@ -6,29 +7,40 @@ namespace Sturfee.Unity.XR.Package.Utilities
 {
     public class AlignmentManager : MonoBehaviour
     {
+//		public static AlignmentManager Instance;
+
         [Header("AR Objects")]
-		public GameObject HitObject;
-        public bool ShowGrid;        
+        public GameObject HitObject;
+        public bool ShowGrid;
 
         [Header("UI")]
-        public GameObject ScanAnimation;
+        public GameObject ScanButton;
         public GameObject QuitButton;
-        public Canvas LandscapeCanvas;
-        public Canvas PortraitCanvas;
 
-		private bool _sessionIsReady;
+        [Header("Scan Type")]
+        public bool UseMultiframeLocalization;
+        public bool ScanAgain;
+
+        [Header("Coverage")]
+        public bool CheckCoverageOnStart;
+
+        private IScanManager _scanManager;
+
+        private bool _sessionIsReady;
         private GameObject _hitObject;
 
         private void Awake()
         {            
+//			Instance = this;
+
             SturfeeEventManager.Instance.OnSessionReady += OnSessionReady;
             SturfeeEventManager.Instance.OnSessionFailed += OnSessionFailed;
             SturfeeEventManager.Instance.OnCoverageCheckComplete += OnCoverageCheckComplete;
-			SturfeeEventManager.Instance.OnLocalizationComplete += OnLocalizationComplete;
-			SturfeeEventManager.Instance.OnLocalizationLoading += OnLocalizationLoading;
-			SturfeeEventManager.Instance.OnDetectSurfacePointComplete += OnDetectSurfacePointComplete;
-			SturfeeEventManager.Instance.OnDetectSurfacePointLoading += OnDetectSurfacePointLoading;
-			SturfeeEventManager.Instance.OnDetectSurfacePointFailed += OnDetectSurfacePointFailed;
+            SturfeeEventManager.Instance.OnLocalizationComplete += OnLocalizationComplete;
+            SturfeeEventManager.Instance.OnLocalizationLoading += OnLocalizationLoading;
+            SturfeeEventManager.Instance.OnDetectSurfacePointComplete += OnDetectSurfacePointComplete;
+            SturfeeEventManager.Instance.OnDetectSurfacePointLoading += OnDetectSurfacePointLoading;
+            SturfeeEventManager.Instance.OnDetectSurfacePointFailed += OnDetectSurfacePointFailed;
         }
 
         private void OnDestroy()
@@ -50,22 +62,35 @@ namespace Sturfee.Unity.XR.Package.Utilities
             SturfeeEventManager.Instance.OnDetectSurfacePointFailed -= OnDetectSurfacePointFailed;
         }
 
+        private void Start()
+        {
+            if (QuitButton != null)
+            {
+                QuitButton.SetActive(true);
+            }
+
+            if(UseMultiframeLocalization)
+            {
+                _scanManager = GetComponentInChildren<MultiframeManager>(true);
+                //_scanManager = GetComponentInChildren<MFSampleSceneRecord>(true);
+            }
+            else
+            {
+                _scanManager = GetComponentInChildren<SingleFrameManager>(true);
+            }
+        }
+
         private void Update()
         {
-			//if (!_sessionIsReady) 
-			//{
-			//	return;
-			//}
-
-            //if (ScreenOrientationHelper.Instance.OrientationChanged || (!LandscapeCanvas.isActiveAndEnabled && !PortraitCanvas.isActiveAndEnabled))
-            //{
-            //    UpdateOrientation();
-            //}
-
-            if (Input.GetMouseButtonDown(0)) 
+            if (!_sessionIsReady) 
             {
-                XRSessionManager.GetSession().DetectSurfaceAtPoint(Input.mousePosition);               
+                return;
             }
+                
+//            if (Input.GetMouseButtonDown(0)) 
+//            {
+//                XRSessionManager.GetSession().DetectSurfaceAtPoint(Input.mousePosition);               
+//            }
         }
 
         public void OnQuitButton()
@@ -76,12 +101,16 @@ namespace Sturfee.Unity.XR.Package.Utilities
         #region XR SESSION
         private void OnSessionReady()
         {
-			_sessionIsReady = true;
+            _sessionIsReady = true;
 
-            //Uncomment this once portrait mode is supported
-            //UpdateOrientation();
-
-            LandscapeCanvas.gameObject.SetActive(true);
+            if (!CheckCoverageOnStart)
+            {
+                ScanButton.SetActive(true);
+            }
+            else
+            {
+                XRSessionManager.GetSession().CheckCoverage();
+            }
         }
 
         private void OnSessionFailed (string error)
@@ -93,45 +122,43 @@ namespace Sturfee.Unity.XR.Package.Utilities
         {
             if(result == false)
             {
-                ToastManager.Instance.ShowToast("Localization not available at this location");
+                ToastManager.Instance.ShowToastTimed("Localization not available at this location. Localization calls won't work", 5);
                 return;
             }
 
             Debug.Log("Localization available");
+
+            if(CheckCoverageOnStart)
+            {
+                ScanButton.SetActive(true);
+            }
         }
         #endregion
 
         #region LOCALIZATION
         public void Capture()
-        {
-            XRSessionManager.GetSession().PerformLocalization();
+        {            
+            _scanManager.OnScanButtonClick();
         }
 
         private void OnLocalizationLoading()
         {
-            //ToastManager.Instance.ShowToast("Alignment in progress...");
-            if(ScanAnimation != null)
-            {
-                ScanAnimation.SetActive(true);
-            }
+            _scanManager.PlayScanAnimation();
         }
 
         private void OnLocalizationComplete (Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus status)
         {
-            if (QuitButton != null)
-            {
-                QuitButton.SetActive(true);
-            }
+            _scanManager.StopScanAnimation();
 
-            if (ScanAnimation != null)
+            if(ScanAgain)
             {
-                ScanAnimation.SetActive(false);
+                ScanButton.SetActive(true);
             }
 
             if (status == Core.Constants.Enums.AlignmentStatus.Done)
             {
                 Debug.Log ("Localization Complete");
-                ToastManager.Instance.ShowToast("Tap anywhere to place planes");
+                ToastManager.Instance.ShowToastTimed("Tap anywhere to place planes");
             }
             else if (status == Core.Constants.Enums.AlignmentStatus.OutOfCoverage)
             {
@@ -145,6 +172,8 @@ namespace Sturfee.Unity.XR.Package.Utilities
             {
                 ToastManager.Instance.ShowToastTimed("Localization failed");
             }
+
+            StartCoroutine(Rescan() );
         }
         #endregion
 
@@ -155,7 +184,7 @@ namespace Sturfee.Unity.XR.Package.Utilities
         }
 
         private void OnDetectSurfacePointComplete (Core.Models.Location.GpsPosition gpsPosition, Vector3 normal)
-		{
+        {
             if (ShowGrid)
             {
                 _hitObject = Instantiate(HitObject, XRSessionManager.GetSession().GpsToLocalPosition(gpsPosition) + (0.1f * normal), Quaternion.LookRotation(normal));
@@ -165,7 +194,7 @@ namespace Sturfee.Unity.XR.Package.Utilities
             {
                 ToastManager.Instance.ShowToastTimed("Raycast complete");   
             }
-		}
+        }
 
         private void OnDetectSurfacePointFailed()
         {
@@ -173,19 +202,16 @@ namespace Sturfee.Unity.XR.Package.Utilities
         }
         #endregion
 
-        private void UpdateOrientation()
+        private IEnumerator Rescan()
         {
-            // un-comment this when portrait mode is supported
-            //if (LandscapeCanvas != null && PortraitCanvas != null)
-            //{
-            //    if (Screen.orientation == ScreenOrientation.Landscape) {
-            //        LandscapeCanvas.gameObject.SetActive (true);
-            //        PortraitCanvas.gameObject.SetActive (false);
-            //    } else if (Screen.orientation == ScreenOrientation.Portrait) {
-            //        LandscapeCanvas.gameObject.SetActive (false);
-            //        PortraitCanvas.gameObject.SetActive (true);
-            //    }
-            //}
+            //wait for couple of seconds
+            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1);
+
+            if (ScanAgain)
+            {
+                ScanButton.SetActive(true);
+            }
         }
     }
 }

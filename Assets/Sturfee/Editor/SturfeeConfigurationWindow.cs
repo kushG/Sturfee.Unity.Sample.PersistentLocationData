@@ -150,7 +150,7 @@ public class SturfeeConfigurationWindow : EditorWindow
 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                var dllFile = new FileInfo(@"Assets/Sturfee/Sturfee.Unity.XR.Core.dll");
+                var dllFile = new FileInfo(@"Assets/Sturfee/SDK/Sturfee.Unity.XR.Core.dll");
                 string assemblyVersion = Assembly.LoadFile(dllFile.FullName).GetName().Version.ToString();
                 GUILayout.Label("v" + assemblyVersion);
                 EditorGUILayout.EndHorizontal();
