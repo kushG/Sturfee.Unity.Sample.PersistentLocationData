@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour {
 	public GameObject HasSaveDataPanel;		// Only appears if save data exists
 	public GameObject ScanButton;
 	public GameObject BackButton;
-	public GameObject AlignmentInstrText;
 
 	[Header("Player")]
 	public PlayerUiController PlayerUi;
@@ -26,8 +25,8 @@ public class GameManager : MonoBehaviour {
 
 //	[Header("Other")]
 	[HideInInspector]
-	public bool HasSaveData;
-	public static bool LoadGame;
+	public bool HasSaveData;		// TODO: maybe remove this too, have AlignmentManager directly reference this
+	public static bool LoadGame;  	// TODO: Remove this
 
 	private bool _hasSaveData;
 	private bool _loadGame = false;
@@ -37,13 +36,9 @@ public class GameManager : MonoBehaviour {
 	{
 		Instance = this;
 
-//		SturfeeEventManager.Instance.OnSessionReady += OnSessionReady;
-//		SturfeeEventManager.Instance.OnLocalizationComplete += OnLocalizationComplete;
-
 		HasSaveDataPanel.SetActive (false);
 //		ScanButton.SetActive (false);
 		BackButton.SetActive (false);
-//		AlignmentInstrText.SetActive (false);
 	}
 
 	void Start ()
@@ -58,9 +53,8 @@ public class GameManager : MonoBehaviour {
 			ScreenMessageController.Instance.SetText ("Initializing Session...");
 		}
 	}
-
-	// TODO: Change this name
-	public void OnStartScreenButtonClick(bool loadGame)
+		
+	public void OnSaveDataStartScreenClick(bool loadGame)
 	{
 
 		_loadGame = loadGame;
@@ -74,113 +68,16 @@ public class GameManager : MonoBehaviour {
 		{
 			SaveLoadManager.Load ();
 			scanButtonText = "Scan (Load Game)";
-//			ScanButton.GetComponentInChildren<Text>().text = "Scan (Load Game)";
 		}
 		else
 		{
 			scanButtonText = "Scan (New Game)";
-//			ScanButton.GetComponentInChildren<Text>().text = "Scan (New Game)";
 		}
 
 		AlignmentManager.Instance.SetScanButton (scanButtonText);
-
-//		ScanButton.GetComponentInChildren<Text> ().text = scanButtonText;
-//
-//		if (_sessionReady)
-//		{
-//			BackButton.SetActive (true);
-//			ScanButton.SetActive (true);
-//		}
-//		else
-//		{
-//			ScreenMessageController.Instance.SetText ("Initializing Session...");
-//		}
 	}
-
-//	public void OnScanClick()
-//	{
-//		ScreenMessageController.Instance.SetText ("Aligning Camera...");
-//		BackButton.SetActive (false);
-//
-//		MultiframeManager.Instance.OnScanButtonClick ();
-////		AlignmentManager.Instance.Capture ();
-//
-////		AlignmentInstrText.SetActive (true);
-////		XRSessionManager.GetSession ().PerformLocalization ();
-//	}
-
-	// Sturfee event called when the Sturfee XR Session is ready to be used
-//	private void OnSessionReady()
-//	{
-//		ScreenMessageController.Instance.ClearText ();
-//
-//		_sessionReady = true;
-//		if (!HasSaveDataPanel.activeSelf)
-//		{
-////			AlignmentManager.Instance.
-//			ScanButton.SetActive (true);
-//
-//			if (_hasSaveData)
-//			{
-//				BackButton.SetActive (true);
-//			}
-//		}
-//	}
-
-//	// Sturfee event called when camera alignment completes
-//	private void OnLocalizationComplete(Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus status)
-//	{
-//		AlignmentInstrText.SetActive (false);
-//		if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.Done)
-//		{
-////			SturfeeEventManager.Instance.OnSessionReady -= OnSessionReady;
-//			SturfeeEventManager.Instance.OnLocalizationComplete -= OnLocalizationComplete;
-//
-//			ScreenMessageController.Instance.SetText ("Camera Alignment Complete", 3);
-//		
-//			// TODO: Temporary coroutine until next SDK fixes this issue (Current: v 0.9.1)
-//			StartCoroutine(InitializeGame());
-//
-//			if (_loadGame)
-//			{
-//				SaveLoadManager.LoadGameData ();
-//			}
-//		}
-//		else if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.IndoorsError)
-//		{
-//			ScreenMessageController.Instance.SetText ("Indoors Error. Please try again outside.", 3);
-//			ResetToScanPanel ();
-//		}
-//		else if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.Error)
-//		{
-//			ScreenMessageController.Instance.SetText ("Alignment Failed", 3);
-//			ResetToScanPanel ();
-//		}
-//	}
-
-	private void ResetToScanPanel()
-	{
-		if (!_hasSaveData)
-		{
-			ScanButton.SetActive (true);
-		}
-		else
-		{
-			OnStartScreenButtonClick (_loadGame);
-		}
-	}
-
-	private IEnumerator InitializeGame()
-	{
-		// Need to wait one frame for corrected GPS position to update for map calls
-		yield return null;
-
-		StreetMap.Instance.InitializeMap();
-		PlayerUi.Initialize ();
-	}
-
-	// TEMP NAME, CHANGE LATER
-	public void InitializeGame2()
+		
+	public void InitializeGame()
 	{
 		if (LoadGame)
 		{
@@ -199,7 +96,7 @@ public class GameManager : MonoBehaviour {
 		}
 		else
 		{
-			OnStartScreenButtonClick (LoadGame);
+			OnSaveDataStartScreenClick (LoadGame);
 		}
 	}
 }

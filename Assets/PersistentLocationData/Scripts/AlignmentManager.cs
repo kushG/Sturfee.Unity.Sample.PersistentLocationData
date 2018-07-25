@@ -37,8 +37,9 @@ public class AlignmentManager : MonoBehaviour {
 	private bool _resetCalled;
 
 //	[Header("UI")]
-	[HideInInspector]
-	public bool SessionReady;
+//	[HideInInspector]
+	public bool _sessionReady = false;
+	public bool _coveredArea = false;
 
 	private int _angle = 50;
 //	private int _targetCount = 3;
@@ -51,7 +52,7 @@ public class AlignmentManager : MonoBehaviour {
 		SturfeeEventManager.Instance.OnSessionFailed += OnSessionFailed;
 		SturfeeEventManager.Instance.OnCoverageCheckComplete += OnCoverageCheckComplete;
 		SturfeeEventManager.Instance.OnLocalizationComplete += OnLocalizationComplete;
-		SturfeeEventManager.Instance.OnLocalizationLoading += OnLocalizationLoading;
+//		SturfeeEventManager.Instance.OnLocalizationLoading += OnLocalizationLoading;
 
 		Cursor.SetActive (false);
 		Arrow.SetActive (false);
@@ -73,7 +74,7 @@ public class AlignmentManager : MonoBehaviour {
 		// LOCALIZATION
 		SturfeeEventManager.Instance.OnCoverageCheckComplete -= OnCoverageCheckComplete;
 		SturfeeEventManager.Instance.OnLocalizationComplete -= OnLocalizationComplete;
-		SturfeeEventManager.Instance.OnLocalizationLoading -= OnLocalizationLoading;
+//		SturfeeEventManager.Instance.OnLocalizationLoading -= OnLocalizationLoading;
 
 	}
 
@@ -81,7 +82,7 @@ public class AlignmentManager : MonoBehaviour {
 	{
 		ScanButton.GetComponentInChildren<Text> ().text = scanButtonText;
 
-		if (SessionReady)
+		if (_sessionReady && _coveredArea)
 		{
 			BackButton.SetActive (true);
 			ScanButton.SetActive (true);
@@ -237,70 +238,41 @@ public class AlignmentManager : MonoBehaviour {
 	#region XR SESSION
 	private void OnSessionReady()
 	{
-		ScreenMessageController.Instance.ClearText ();
-
-		SessionReady = true;
-
-
-
-
-		if (!GameManager.Instance.HasSaveDataPanel.activeSelf)
-		{
-			ScanButton.SetActive (true);
-
-			if (GameManager.Instance.HasSaveData)
-			{
-				BackButton.SetActive (true);
-			}
-		}
-
-
-//		_sessionIsReady = true;
-//
-//		if (!CheckCoverageOnStart)
-//		{
-//			ScanButton.SetActive(true);
-//		}
-//		else
-//		{
-//			XRSessionManager.GetSession().CheckCoverage();
-//		}
+		_sessionReady = true;
+		XRSessionManager.GetSession().CheckCoverage();
 	}
 
 	private void OnSessionFailed (string error)
 	{
 		ScreenMessageController.Instance.SetText("Session Intialization failed : " + error);
-//		ToastManager.Instance.ShowToast("Session Intialization failed : " + error);
 	}
 
 	private void OnCoverageCheckComplete (bool result)
 	{
-		if(result == false)
+		if (result == false)
 		{
-			ScreenMessageController.Instance.SetText("Localization not available at this location. Localization calls won't work", 5);
-			return;
+			ScreenMessageController.Instance.SetText ("Localization not available at this location\nLocalization calls won't work", 5);
 		}
-
-		Debug.Log("Localization available");
-
-		if(CheckCoverageOnStart)
+		else
 		{
-			ScanButton.SetActive(true);
+			ScreenMessageController.Instance.ClearText ();
+
+			_coveredArea = true;
+
+			if (!GameManager.Instance.HasSaveDataPanel.activeSelf)
+			{
+				ScanButton.SetActive (true);
+
+				if (GameManager.Instance.HasSaveData)
+				{
+					BackButton.SetActive (true);
+				}
+			}
 		}
 	}
 	#endregion
 
 	#region LOCALIZATION
-	public void Capture()
-	{            
-//		_scanManager.OnScanButtonClick();
-	}
-
-	private void OnLocalizationLoading()
-	{
-//		_scanManager.PlayScanAnimation();
-	}
-
 	private void OnLocalizationComplete (Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus status)
 	{
 		print ("*** ALIGNMENT MANAGER LOCALIZATION COMPLETE ***");
@@ -309,10 +281,7 @@ public class AlignmentManager : MonoBehaviour {
 		{
 			ScreenMessageController.Instance.SetText ("Camera Alignment Complete", 3);
 
-			GameManager.Instance.InitializeGame2 ();
-
-//			Debug.Log ("Localization Complete");
-//			ToastManager.Instance.ShowToastTimed("Tap anywhere to place planes");
+			GameManager.Instance.InitializeGame ();
 		}
 		else if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.OutOfCoverage)
 		{
