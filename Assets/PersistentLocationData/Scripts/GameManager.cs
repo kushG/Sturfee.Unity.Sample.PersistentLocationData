@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
 	void Start ()
 	{
 		_hasSaveData = SaveLoadManager.HasSaveData ();
+		HasSaveData = _hasSaveData;
 		if (_hasSaveData)
 		{
 			HasSaveDataPanel.SetActive (true);

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Sturfee.Unity.XR.Core.Events;
 using Sturfee.Unity.XR.Core.Session;
 
-// TODO: Maybe change the name to something like 'Seeking Arrow'
+// TODO: Maybe change the name to something like 'Seeking/er Arrow'
 public class MultiframeArrow : MonoBehaviour {
 
 //	public Transform Arrow;
@@ -40,11 +40,6 @@ public class MultiframeArrow : MonoBehaviour {
 		SturfeeEventManager.Instance.OnRequestAddedForMultiframe -= OnRequestAddedForMultiframe;
 	}
 
-	private void OnDisable()
-	{
-
-	}
-
 	void Update()
 	{
 		if (_isScanning)
@@ -57,8 +52,6 @@ public class MultiframeArrow : MonoBehaviour {
 
 			//Compute the angle from _screenMiddle to targetPos
 			var tarAngle = (Mathf.Atan2(targetPos.x-_screenMiddle.x,Screen.height-targetPos.y-_screenMiddle.y) * Mathf.Rad2Deg)+90;
-
-
 	
 
 			//Calculate the angle from the camera to the target

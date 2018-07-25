@@ -26,8 +26,8 @@ public class AlignmentManager : MonoBehaviour {
 	public GameObject Cursor;
 	public GameObject Arrow;
 
-	[Header("Coverage")]
-	public bool CheckCoverageOnStart; // TODO: probably remove this bool and just check
+//	[Header("Coverage")]
+//	public bool CheckCoverageOnStart; // TODO: probably remove this bool and just check
 
 	private List<GameObject> _gazeTargets;
 	private int _totalTargets = 3;  // TODO: Change name - user only sees 2 targets....
@@ -38,8 +38,8 @@ public class AlignmentManager : MonoBehaviour {
 
 //	[Header("UI")]
 //	[HideInInspector]
-	public bool _sessionReady = false;
-	public bool _coveredArea = false;
+	private bool _sessionReady = false;
+	private bool _coveredArea = false;
 
 	private int _angle = 50;
 //	private int _targetCount = 3;
@@ -195,6 +195,18 @@ public class AlignmentManager : MonoBehaviour {
 		{
 			Camera xrCamera = GameObject.FindGameObjectWithTag("XRCamera").GetComponent<Camera>();
 			//Debug.DrawRay(xrCamera.transform.position, xrCamera.transform.forward * 1000, Color.green, 2000);
+
+
+//			RaycastHit2D hit2D = Physics2D.Raycast(xrCamera.transform.position, xrCamera.transform.forward);
+//			if (hit2D.transform.gameObject == target)
+//			{                    
+//				done = true;
+//			}
+//			else
+//			{
+//				yield return null;
+//			}
+
 
 			//TODO: Exclude building/terrain layers
 			if (Physics.Raycast(xrCamera.transform.position, xrCamera.transform.forward, out hit, Mathf.Infinity))//, ~LayerMask.NameToLayer("Multiframe UI")))

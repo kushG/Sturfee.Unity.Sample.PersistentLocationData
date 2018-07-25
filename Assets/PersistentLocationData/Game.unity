@@ -903,7 +903,6 @@ MonoBehaviour:
   HasSaveDataPanel: {fileID: 1540109971}
   ScanButton: {fileID: 863213397}
   BackButton: {fileID: 1934461266}
-  AlignmentInstrText: {fileID: 1451389878}
   PlayerUi: {fileID: 1775942415}
   Tier1ItemPrefab: {fileID: 1827610452284904, guid: b38fe9bf74d6f44a88e81c5f13e6defb,
     type: 2}
@@ -4705,12 +4704,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScanButton: {fileID: 863213397}
   BackButton: {fileID: 1934461266}
-  GazeTargetPrefab: {fileID: 1147463302093092, guid: 6272a9d6c0ba34627b62a236836ee187,
+  GazeTargetPrefab: {fileID: 1106813730142642, guid: aa1139b7f2e964a7786a5014852b0150,
     type: 2}
   Cursor: {fileID: 1591787357}
   Arrow: {fileID: 1633438154}
-  CheckCoverageOnStart: 0
-  SessionReady: 0
 --- !u!1 &1953047433
 GameObject:
   m_ObjectHideFlags: 0
