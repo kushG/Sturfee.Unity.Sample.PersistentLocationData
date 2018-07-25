@@ -1,1 +1,1 @@
-{"AccessToken":"N/A","MemoryCacheSize":500,"MbTilesCacheSize":2000,"DefaultTimeout":30,"AutoRefreshCache":false}
+{"AccessToken":"n/a","MemoryCacheSize":500,"MbTilesCacheSize":2000,"DefaultTimeout":30,"AutoRefreshCache":false}
