@@ -7,8 +7,6 @@ namespace Sturfee.Unity.XR.Package.Utilities
 {
     public class AlignmentManager : MonoBehaviour
     {
-//		public static AlignmentManager Instance;
-
         [Header("AR Objects")]
         public GameObject HitObject;
         public bool ShowGrid;
@@ -31,8 +29,6 @@ namespace Sturfee.Unity.XR.Package.Utilities
 
         private void Awake()
         {            
-//			Instance = this;
-
             SturfeeEventManager.Instance.OnSessionReady += OnSessionReady;
             SturfeeEventManager.Instance.OnSessionFailed += OnSessionFailed;
             SturfeeEventManager.Instance.OnCoverageCheckComplete += OnCoverageCheckComplete;
@@ -87,10 +83,10 @@ namespace Sturfee.Unity.XR.Package.Utilities
                 return;
             }
                 
-//            if (Input.GetMouseButtonDown(0)) 
-//            {
-//                XRSessionManager.GetSession().DetectSurfaceAtPoint(Input.mousePosition);               
-//            }
+            if (Input.GetMouseButtonDown(0)) 
+            {
+                XRSessionManager.GetSession().DetectSurfaceAtPoint(Input.mousePosition);               
+            }
         }
 
         public void OnQuitButton()
@@ -167,6 +163,10 @@ namespace Sturfee.Unity.XR.Package.Utilities
             else if (status == Core.Constants.Enums.AlignmentStatus.IndoorsError)
             {
                 ToastManager.Instance.ShowToastTimed("Localization Failed: Indoors Error");
+            }
+            else if (status == Core.Constants.Enums.AlignmentStatus.RequestError)
+            {
+                ToastManager.Instance.ShowToastTimed("Localization Failed: Request Error");
             }
             else if (status == Core.Constants.Enums.AlignmentStatus.Error)
             {

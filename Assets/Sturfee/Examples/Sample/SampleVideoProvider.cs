@@ -69,12 +69,9 @@ public class SampleVideoProvider : VideoProviderBase
 
     public override void Destroy()
     {
-        if(_videoCamera != null)
-        {
-            //If session is destryoyed without destroying the scene
-            UnityEngine.Object.Destroy(_videoCamera.gameObject);
-            UnityEngine.Object.Destroy(_canvas.gameObject);
-        }
+
+        UnityEngine.Object.Destroy((_videoCamera != null) ? _videoCamera.gameObject : null);
+        UnityEngine.Object.Destroy((_canvas != null) ? _canvas.gameObject : null);
     }
 
     private void CreateCamera()

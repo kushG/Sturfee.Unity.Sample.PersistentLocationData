@@ -11,8 +11,9 @@ Note : This scene is useful in understanding the localization process. It remove
 
 "Sample Provider set" is the provider set that provides with the providers that are used to simulate a real test field.
 
-SampleVideoProvider : Simulates device's back camera by displaying a set of frames stored in an array. SampleImuProvider : Provides IMU orientation to XRCamera by reading orientation from data stored in a text file. 
-This file consists of orientation mapped for each frame that is used by SampleVideoProvider DebugGpsProvider : Allows to set GPS values in inspector which will be provided to XRSession
+SampleVideoProvider : Simulates device's back camera by displaying a set of frames stored in an array. 
+SampleImuProvider : Provides IMU orientation to XRCamera by reading orientation from data stored in a text file. This file consists of orientation mapped for each frame that is used by SampleVideoProvider 
+DebugGpsProvider : Allows to set GPS values in inspector which will be provided to XRSession
 
 SampleManager : Keeps frame array and the data(text) file. Also does the mapping between frames and their respective orientation in Data(text) file.
 

@@ -9,9 +9,6 @@ using Sturfee.Unity.XR.Core.Events;
 
 public class MultiframeManager : MonoBehaviour, IScanManager {
 
-	// NWMN ADDED
-	public static MultiframeManager Instance;
-
     //Note: Do not change these values for release 1.0.0
     public static readonly int  Angle = 50;
     public static readonly int TargetCount = 3;
@@ -36,11 +33,6 @@ public class MultiframeManager : MonoBehaviour, IScanManager {
     private bool _isScanning;
     private bool _resetCalled;
 
-	// NWMN ADDED
-	private void Awake()
-	{
-		Instance = this;
-	}
 
     private void Start()
     {
@@ -96,10 +88,8 @@ public class MultiframeManager : MonoBehaviour, IScanManager {
         }
 
         _cursor.SetActive(false);
-
-		// NWMN CHANGE
-//        _scanFX.SetActive(false);
-//        _resetButton.SetActive(false);
+        _scanFX.SetActive(false);
+        _resetButton.SetActive(false);
 
         _isScanning = false;
     }
@@ -111,10 +101,8 @@ public class MultiframeManager : MonoBehaviour, IScanManager {
         _gazeTargets = new List<GameObject>();
 
         _cursor.SetActive(true);
-
-		// NWMN CHANGE
-//        _scanFX.SetActive(true);
-//        _resetButton.SetActive(true);
+        _scanFX.SetActive(true);
+        _resetButton.SetActive(true);
 
         _multiframeRequestId = 0;
 

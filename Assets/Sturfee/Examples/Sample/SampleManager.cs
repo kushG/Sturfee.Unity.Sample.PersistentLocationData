@@ -26,6 +26,8 @@ public class SampleManager : MonoBehaviour
     {
         _dataJson = Data.text;
         _orientationData = JsonHelper.FromJson<OrientationData>(_dataJson);
+
+        PopulateFrames();
     }
 
     private void Update()
@@ -77,6 +79,36 @@ public class SampleManager : MonoBehaviour
     public Texture2D GetFrameAtIndex(int i)
     {
         return Frames[i];
+    }
+
+
+    private void PopulateFrames()
+    {
+        Frames = new Texture2D[181];
+
+        for (int i = 0; i < 181; i++)
+        {
+            StartCoroutine(DownloadFrame(i));
+        }
+    }
+
+    private IEnumerator DownloadFrame(int i)
+    {
+        WWW www = new WWW("https://s3-us-west-1.amazonaws.com/sdk-sample-scene/" + i + ".jpg");
+
+        yield return www;
+
+        if(string.IsNullOrEmpty(www.error))
+        {
+            Texture2D texture2D = new Texture2D(0, 0);
+            texture2D.LoadImage(www.bytes);
+
+            Frames[i] = texture2D;
+        }
+        else
+        {
+            Debug.LogError(www.error);
+        }
     }
 
 
