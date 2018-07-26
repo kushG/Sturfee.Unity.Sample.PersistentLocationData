@@ -21,10 +21,12 @@ public class AlignmentManager : MonoBehaviour {
 	public GameObject ScanButton;
 	public GameObject BackButton;
 
+	// TODO: Change these to private variables
 	[Header("Multiframe UI")]
 	public GameObject GazeTargetPrefab;  // TODO: Change name to 'Prefab'
 	public GameObject Cursor;
 	public GameObject Arrow;
+	public GameObject ScanAnimation;
 
 	[Header("Other")]
 	public Camera XrCamera;
@@ -55,8 +57,10 @@ public class AlignmentManager : MonoBehaviour {
 		SturfeeEventManager.Instance.OnSessionFailed += OnSessionFailed;
 		SturfeeEventManager.Instance.OnCoverageCheckComplete += OnCoverageCheckComplete;
 		SturfeeEventManager.Instance.OnLocalizationComplete += OnLocalizationComplete;
-//		SturfeeEventManager.Instance.OnLocalizationLoading += OnLocalizationLoading;
+		SturfeeEventManager.Instance.OnLocalizationLoading += OnLocalizationLoading;
 
+		ScanButton.SetActive (false);
+		BackButton.SetActive(false);
 		Cursor.SetActive (false);
 		Arrow.SetActive (false);
 	}
@@ -77,7 +81,7 @@ public class AlignmentManager : MonoBehaviour {
 		// LOCALIZATION
 		SturfeeEventManager.Instance.OnCoverageCheckComplete -= OnCoverageCheckComplete;
 		SturfeeEventManager.Instance.OnLocalizationComplete -= OnLocalizationComplete;
-//		SturfeeEventManager.Instance.OnLocalizationLoading -= OnLocalizationLoading;
+		SturfeeEventManager.Instance.OnLocalizationLoading -= OnLocalizationLoading;
 
 	}
 
@@ -289,8 +293,15 @@ public class AlignmentManager : MonoBehaviour {
 	#endregion
 
 	#region LOCALIZATION
+	private void OnLocalizationLoading()
+	{
+		ScanAnimation.SetActive (true);
+	}
+
 	private void OnLocalizationComplete (Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus status)
 	{
+		ScanAnimation.SetActive (false);
+
 		if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.Done)
 		{
 			ScreenMessageController.Instance.SetText ("Camera Alignment Complete", 3);
@@ -317,10 +328,21 @@ public class AlignmentManager : MonoBehaviour {
 				ScreenMessageController.Instance.SetText("Localization failed");
 			}
 
-			GameManager.Instance.ResetToStartScreen ();
+			ResetToStartScreen ();
 		}
 
 	}
 	#endregion
 
+	private void ResetToStartScreen()
+	{
+		if (GameManager.Instance.HasSaveData)
+		{
+			GameManager.Instance.OnSaveDataStartScreenClick (GameManager.Instance.LoadGame); // TODO: CHANGE THIS!!!
+		}
+		else
+		{
+			ScanButton.SetActive (false);
+		}
+	}
 }

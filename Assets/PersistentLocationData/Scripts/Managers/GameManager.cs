@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour {
 
 	[Header("UI")]
 	public GameObject HasSaveDataPanel;		// Only appears if save data exists
-	public GameObject ScanButton;
-	public GameObject BackButton;
+//	public GameObject ScanButton;
+//	public GameObject BackButton;
 
 	[Header("Player")]
 	public PlayerUiController PlayerUi;
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
 //	[Header("Other")]
 	[HideInInspector]
 	public bool HasSaveData;		// TODO: maybe remove this too, have AlignmentManager directly reference this
-	public static bool LoadGame;  	// TODO: Remove this
+	public bool LoadGame;  	// TODO: Remove this
 
 	private bool _hasSaveData;
 	private bool _loadGame = false;
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour {
 
 		HasSaveDataPanel.SetActive (false);
 //		ScanButton.SetActive (false);
-		BackButton.SetActive (false);
+//		BackButton.SetActive (false);
 	}
 
 	void Start ()
@@ -89,15 +89,15 @@ public class GameManager : MonoBehaviour {
 		PlayerUi.Initialize ();
 	}
 
-	public void ResetToStartScreen()
-	{
-		if (!_hasSaveData)
-		{
-			ScanButton.SetActive (true);
-		}
-		else
-		{
-			OnSaveDataStartScreenClick (LoadGame);
-		}
-	}
+//	public void ResetToStartScreen()
+//	{
+//		if (!_hasSaveData)
+//		{
+//			ScanButton.SetActive (true);
+//		}
+//		else
+//		{
+//			OnSaveDataStartScreenClick (LoadGame);
+//		}
+//	}
 }
