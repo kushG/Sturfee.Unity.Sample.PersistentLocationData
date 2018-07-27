@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Sturfee.Unity.XR.Core.Events;
 using Sturfee.Unity.XR.Core.Session;
 using Sturfee.Unity.XR.Package.Utilities;
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject HasSaveDataPanel;		// Only appears if save data exists
 //	public GameObject ScanButton;
 //	public GameObject BackButton;
+	public GameObject LookTrigger;
 
 	[Header("Player")]
 	public PlayerUiController PlayerUi;
@@ -43,6 +45,8 @@ public class GameManager : MonoBehaviour {
 
 	void Start ()
 	{
+//		LookTrigger.SetActive (true);
+
 		_hasSaveData = SaveLoadManager.HasSaveData ();
 		HasSaveData = _hasSaveData;
 		if (_hasSaveData)
@@ -51,10 +55,13 @@ public class GameManager : MonoBehaviour {
 		}
 		else
 		{
+			LookTrigger.GetComponent<LookUpTrigger> ().IsEnabled = true;
+//			LookTrigger.SetActive(true);
 			ScreenMessageController.Instance.SetText ("Initializing Session...");
 		}
 	}
 		
+	// If save data exists, then pressing 'New Game' or 'Load Game' button will lead to this call
 	public void OnSaveDataStartScreenClick(bool loadGame)
 	{
 
@@ -62,7 +69,7 @@ public class GameManager : MonoBehaviour {
 		LoadGame = loadGame;
 		HasSaveDataPanel.SetActive (false);
 
-		// TODO: Move this code below to AlignmentManager
+		// TODO: Consider giving Alignment manager its own private vairable for if loading game or not, then move this code over there
 
 		string scanButtonText;// = ScanButton.GetComponentInChildren<Text>().text;
 		if (loadGame)
@@ -75,6 +82,8 @@ public class GameManager : MonoBehaviour {
 			scanButtonText = "Scan (New Game)";
 		}
 
+		LookTrigger.GetComponent<LookUpTrigger> ().IsEnabled = true;
+//		LookTrigger.SetActive(true);
 		AlignmentManager.Instance.SetScanButton (scanButtonText);
 	}
 		
@@ -87,6 +96,18 @@ public class GameManager : MonoBehaviour {
 
 		StreetMap.Instance.InitializeMap();
 		PlayerUi.Initialize ();
+	}
+
+	public void ResetGame(float timer = 0)
+	{
+		Invoke ("TimedGameReset", timer);
+	}
+
+	private void TimedGameReset(/*float time*/)
+	{
+//		yield return new WaitForSeconds (time);
+		SaveLoadManager.Unload ();
+		SceneManager.LoadScene ("Game");
 	}
 
 //	public void ResetToStartScreen()

@@ -79,11 +79,12 @@ public class PlayerUiController : MonoBehaviour {
 		SelectorIcon.position = InteractButton.position;
 	}
 
-	public void OnExitGameClick()
-	{
-		SaveLoadManager.Unload ();
-		SceneManager.LoadScene ("Game");
-	}
+	// TODO: Move this to GameManager
+//	public void OnExitGameClick()
+//	{
+//		SaveLoadManager.Unload ();
+//		SceneManager.LoadScene ("Game");
+//	}
 		
 	public void OnMapViewClick()
 	{

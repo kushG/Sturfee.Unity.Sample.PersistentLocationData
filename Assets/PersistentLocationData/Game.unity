@@ -188,6 +188,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &136966632 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1083518564134558, guid: b7ccf499acc164e6d853879300dc4509,
+    type: 2}
+  m_PrefabInternal: {fileID: 1978519314}
 --- !u!1 &192854959
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,8 +1030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HasSaveDataPanel: {fileID: 1540109971}
-  ScanButton: {fileID: 863213397}
-  BackButton: {fileID: 1934461266}
+  LookTrigger: {fileID: 136966632}
   PlayerUi: {fileID: 1775942415}
   Tier1ItemPrefab: {fileID: 1827610452284904, guid: b38fe9bf74d6f44a88e81c5f13e6defb,
     type: 2}
@@ -1035,6 +1039,7 @@ MonoBehaviour:
   Tier3ItemPrefab: {fileID: 1108567775269192, guid: cd169b8f4ae5f446cadc51d904043f35,
     type: 2}
   HasSaveData: 0
+  LoadGame: 0
 --- !u!4 &410717735
 Transform:
   m_ObjectHideFlags: 0
@@ -2007,7 +2012,6 @@ GameObject:
   - component: {fileID: 659486764}
   - component: {fileID: 659486763}
   - component: {fileID: 659486762}
-  - component: {fileID: 659486766}
   m_Layer: 0
   m_Name: FullScreenMapCamera
   m_TagString: Untagged
@@ -2078,17 +2082,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &659486766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 659486761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 664c617a70cc348bb86f4c585ff573f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &785606640
 Prefab:
   m_ObjectHideFlags: 0
@@ -2622,7 +2615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &863213398
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2684,17 +2677,6 @@ MonoBehaviour:
       - m_Target: {fileID: 1948282417}
         m_MethodName: OnScanClick
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 863213397}
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4713,48 +4695,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1540109971}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1948282417}
+        m_MethodName: OnBackClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 863213397}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1934461266}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1324841888}
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Scan
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -4839,6 +4788,7 @@ MonoBehaviour:
   Cursor: {fileID: 1591787357}
   Arrow: {fileID: 1633438154}
   ScanAnimation: {fileID: 1364719116}
+  LookTrigger: {fileID: 136966632}
   XrCamera: {fileID: 1775942413}
 --- !u!1 &1953047433
 GameObject:
@@ -4914,6 +4864,68 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1953047433}
+--- !u!1001 &1978519314
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456244546786220, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114501980193883744, guid: b7ccf499acc164e6d853879300dc4509,
+        type: 2}
+      propertyPath: XrCamera
+      value: 
+      objectReference: {fileID: 1775942413}
+    - target: {fileID: 114188909460322866, guid: b7ccf499acc164e6d853879300dc4509,
+        type: 2}
+      propertyPath: LocalizeButton
+      value: 
+      objectReference: {fileID: 863213399}
+    - target: {fileID: 1083518564134558, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114501980193883744, guid: b7ccf499acc164e6d853879300dc4509,
+        type: 2}
+      propertyPath: IsEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114188909460322866, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+  m_ParentPrefab: {fileID: 100100000, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &2061284789
 GameObject:
   m_ObjectHideFlags: 0
@@ -5112,9 +5124,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1775942415}
-        m_MethodName: OnExitGameClick
-        m_Mode: 1
+      - m_Target: {fileID: 410717734}
+        m_MethodName: ResetGame
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
