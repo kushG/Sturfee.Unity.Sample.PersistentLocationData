@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
+// Handles visuals of gaze target alignment confirmation
 public class GazeTarget : MonoBehaviour {
 
 	[SerializeField]
@@ -15,7 +14,6 @@ public class GazeTarget : MonoBehaviour {
 	private Image _confirmationCircleImage;
 	private Color _confirmationCircleColor;
 
-	// Use this for initialization
 	void Start () {
 		_confirmationCircleImage = _confirmationCircle.GetComponent<Image> ();
 		_confirmationCircleColor = _confirmationCircleImage.color;
@@ -29,21 +27,16 @@ public class GazeTarget : MonoBehaviour {
 		_checkmark.SetActive (true);
 
 		Fade ();
-		//		Invoke ("Fade", 0.2f);
-		//		StartCoroutine (Fade ());
 	}
-
+		
 	private void Fade()
 	{
-		//		yield return new WaitForFixedUpdate ();
-
 		_confirmationCircleColor.a -= 0.02f;
 		_confirmationCircleImage.color = _confirmationCircleColor;
 
 		if (_confirmationCircleColor.a > 0)
 		{
 			Invoke ("Fade", 0.02f);
-			//			StartCoroutine (Fade ());
 		}
 		else
 		{

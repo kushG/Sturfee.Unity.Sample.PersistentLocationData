@@ -78,13 +78,6 @@ public class PlayerUiController : MonoBehaviour {
 		_playerCanvas.SetActive (true);
 		SelectorIcon.position = InteractButton.position;
 	}
-
-	// TODO: Move this to GameManager
-//	public void OnExitGameClick()
-//	{
-//		SaveLoadManager.Unload ();
-//		SceneManager.LoadScene ("Game");
-//	}
 		
 	public void OnMapViewClick()
 	{

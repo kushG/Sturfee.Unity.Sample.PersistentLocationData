@@ -5,26 +5,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sturfee.Unity.XR.Core.Events;
 using Sturfee.Unity.XR.Core.Session;
-//using Sturfee.Unity.XR.Core.Constants;
-//using Sturfee.Unity.XR.Package.Utilities;
 
-
-// Customized Alignment script - adjusts the alignments circles or 'Gaze Targets' to be in one direction from the starting point, instead of to the left and right
-// 	- Also adds an arrow that points directly towards the circle regardless of camera position
+// Customized Alignment script
+// Combines the code from the default provided 'AlignmentManager' and 'MultiframeManager', and makes several adjustments
+//
+// - Gaze Targets are adjusted to appear in one direction and one at a time, instead of to the left and right of where the player begins scanning
+// - Default left/right arrows have been changed to use an arrow that points directly towards the gaze target
 public class AlignmentManager : MonoBehaviour {
 
 	public static AlignmentManager Instance;
-
-	// TODO: finish incorporating 'CheckCoverageOnStart'
-	// TODO: Possibly change these public variables to private
 
 	[Header("Buttons")]
 	public GameObject ScanButton;
 	public GameObject BackButton;
 
-	// TODO: Change these to private variables
 	[Header("Multiframe UI")]
-	public GameObject GazeTargetPrefab;  // TODO: Change name to 'Prefab'
+	public GameObject GazeTargetPrefab;
 	public GameObject Cursor;
 	public GameObject Arrow;
 	public GameObject ScanAnimation;
@@ -32,26 +28,22 @@ public class AlignmentManager : MonoBehaviour {
 
 	[Header("Other")]
 	public Camera XrCamera;
-
-//	[Header("Coverage")]
-//	public bool CheckCoverageOnStart; // TODO: probably remove this bool and just check
+	public LayerMask MultiframeLayerMask;
 
 	private List<GameObject> _gazeTargets;
-	private int _totalTargets = 3;  // TODO: Change name - user only sees 2 targets....
-	private int _targetCount;
+	private int _totalTargets = 3;   			// Total # of pictures required. The actual amount of targets the user must align manually is (_totalTargets - 1)
+	private int _targetCount;					
+	private int _angle = 50;					// Angle between the gaze targets placed. The current SDK requires the angle be 50.
 	private bool _isScanning; 
 	private int _multiframeRequestId;
 	private bool _resetCalled;
 	private bool _midAlignmentError = false;
+	private bool _loadGame;
 
-//	[Header("UI")]
-//	[HideInInspector]
+	// Prerequisites required to begin scan
 	private bool _sessionReady = false;
-	private bool _coveredArea = false;
+	private bool _coveredArea = false;			// Denotes if you are using the app in a Sturfee-enabled location
 	private bool _lookedUp = false;
-
-	private int _angle = 50;
-//	private int _targetCount = 3;
 
 	private void Awake()
 	{            
@@ -69,11 +61,11 @@ public class AlignmentManager : MonoBehaviour {
 		BackButton.SetActive(false);
 		Cursor.SetActive (false);
 		Arrow.SetActive (false);
+		ScanAnimation.SetActive (false);
 	}
 
 	private void Start () {
 		_targetCount = _totalTargets - 1;
-
 	}
 
 	private void OnDestroy()
@@ -93,55 +85,38 @@ public class AlignmentManager : MonoBehaviour {
 
 	}
 
-	public void SetScanButton(string scanButtonText)
+	public void SetScanButton(bool loadGame)
 	{
+		_loadGame = loadGame;
 
-		ScanButton.GetComponentInChildren<Text> ().text = scanButtonText;
+		if (loadGame)
+		{
+			ScanButton.GetComponentInChildren<Text> ().text = "Scan (Load Game)";
+		}
+		else
+		{
+			ScanButton.GetComponentInChildren<Text> ().text = "Scan (New Game)";
+		}
 
-//		LookUpTrigger.OnUserLookedUp += HandleOnLookUpComplete;
-
+		LookTrigger.GetComponent<LookUpTrigger> ().IsEnabled = true;
 		EnableScanButton ();
-//		bool scanEnabled = EnableScanButton ();
-//		if (!EnableScanButton () /*scanEnabled*/)
-//		{
-//			ScreenMessageController.Instance.SetText ("Initializing Session...");
-//		}
-
-//		if (_sessionReady && _coveredArea)
-//		{
-//			BackButton.SetActive (true);
-//			ScanButton.SetActive (true);
-//		}
-//		else
-//		{
-//			ScreenMessageController.Instance.SetText ("Initializing Session...");
-//		}
 	}
 
 	public void OnScanClick()
 	{
 		ScanButton.SetActive (false);
-//		_midAlignmentError = false;
-
-		ScreenMessageController.Instance.SetText ("Align center of screen with circles");
 		BackButton.SetActive (true);
 
-//		MultiframeManager.Instance.OnScanButtonClick ();
+		ScreenMessageController.Instance.SetText ("Align center of screen with circles");
 
 		_isScanning = true;
 
-		print ("*** MULTIFRAME CALL START ***");
-
 		StartCoroutine(MultiframeCallAsync());
-
-		//		AlignmentManager.Instance.Capture ();
-
-		//		AlignmentInstrText.SetActive (true);
-		//		XRSessionManager.GetSession ().PerformLocalization ();
 	}
-
+		
 	public void OnBackClick()
 	{
+		// Cancels multiframe alignment
 		if (_isScanning)
 		{
 			_resetCalled = true;
@@ -152,7 +127,7 @@ public class AlignmentManager : MonoBehaviour {
 			}
 			ScreenMessageController.Instance.ClearText ();
 		}
-		else
+		else // Goes back to choose whether you would like to load game or start new game
 		{
 			ScanButton.SetActive (false);
 			BackButton.SetActive (false);
@@ -167,93 +142,67 @@ public class AlignmentManager : MonoBehaviour {
 
 	private IEnumerator MultiframeCallAsync()
 	{
-		print ("*** MULTIFRAME CALL ACTIVE ***");
-
-		//Setup variables for starting multiframe requests
+		// Setup variables for starting multiframe requests
 		SetupMultiframe();
 
-		//Create gaze targets
+		// Create gaze targets
 		CreateGazeTargets();
 
-		//wait till all the requests are complete
-		while (_multiframeRequestId != _totalTargets /*&& !_error*/)
+		// Wait until all the requests are complete
+		while (_multiframeRequestId != _totalTargets)
 		{
-			print ("*** MULTIFRAME CALL ASYNC WHILE LOOP ***");
 			yield return null;
 		}
 
-		print ("*** MULTIFRAME CALL COMPLETE ***");
-
-//		if (_error)
-//		{
-//			while(_gazeTargets.Count > 0)
-//			{
-//				_gazeTargets.RemoveAt (0);
-//			}
-//		}
-
-		Cursor.SetActive(false);
-
-
 		_isScanning = false;
-
+		Cursor.SetActive(false);
 		Arrow.SetActive (false);
-
 	}
 
 	private void SetupMultiframe()
 	{
 		_resetCalled = false;
-
 		_gazeTargets = new List<GameObject>();
-
 		Cursor.SetActive(true);
-
 		_multiframeRequestId = 0;
-
 		AddToMultiframeLocalizationCall();
 	}
 
 	private void CreateGazeTargets()
 	{
+		// Changed how gaze targets are placed from default 'MultiframeManager' script
+		// Targets are placed in one direction, instead of to the left and right
+		// Targets also appear one at a time, instead of both appearing at once
+
 		for (int i = 1; i <= _targetCount; i++)
 		{
-			int j;
-			Vector3 dir;
-
+			Vector3 dir = Quaternion.AngleAxis (_angle * i, Vector3.up) * (XRSessionManager.GetSession ().GetXRCameraOrientation () * Vector3.forward);
 
 			var gaze = Instantiate (GazeTargetPrefab);
-			dir = Quaternion.AngleAxis (_angle * i, Vector3.up) * (XRSessionManager.GetSession ().GetXRCameraOrientation () * Vector3.forward);
 			gaze.transform.position = XRSessionManager.GetSession ().GetXRCameraPosition () + (dir * 10.0f);
-			gaze.transform.LookAt (XrCamera.transform /*GameObject.FindGameObjectWithTag ("XRCamera").transform*/);
-
+			gaze.transform.LookAt (XrCamera.transform);
 			gaze.name = "Gaze target (" + (_angle * i) + ")";
+			gaze.SetActive (false);
 
 			_gazeTargets.Add (gaze);
-
-			gaze.SetActive (false);
 		}
 
 		Arrow.SetActive (true);
 		StartCoroutine(CheckGazeTargetHit(_gazeTargets[0]));
 	}
-
-
-
+		
 	private IEnumerator CheckGazeTargetHit(GameObject target)
 	{
 		_gazeTargets [_multiframeRequestId - 1].SetActive (true);
-		Arrow.GetComponent<MultiframeArrow>().SetTarget (target.transform);
+		Arrow.GetComponent<MultiframeSeekerArrow>().SetTarget (target.transform);
 
 		RaycastHit hit;
 		bool done = false;
 
 		while (!done && !_resetCalled)
 		{
-
-
 			//TODO: Exclude building/terrain layers
-			if (Physics.Raycast(XrCamera.transform.position, XrCamera.transform.forward, out hit, Mathf.Infinity))//, ~LayerMask.NameToLayer("Multiframe UI")))
+			if (Physics.Raycast(XrCamera.transform.position, XrCamera.transform.forward, out hit, Mathf.Infinity, MultiframeLayerMask))
 			{
 				if (hit.transform.gameObject == target)
 				{                    
@@ -280,51 +229,37 @@ public class AlignmentManager : MonoBehaviour {
 		}
 
 		AddToMultiframeLocalizationCall();
-
 	}
 
 	private void AddToMultiframeLocalizationCall()
 	{
-//		if (!_error)
-//		{
-//		print ("ERROR: " + _error);
-
 		_multiframeRequestId++;
 
-		try
-		{
-
+//		try
+//		{
 			//If reset is called, send -1 otherwise the count
 			XRSessionManager.GetSession ().PerformLocalization ((_resetCalled) ? -1 : _totalTargets /*TargetCount*/);
-		}
-		catch(Exception e)
+//		}
+//		catch(Exception e)
+//		{
+//			Debug.Log ("In Exception");
+////				ScanButton.SetActive (true);
+//		}
+
+		if (_multiframeRequestId > 1 && _multiframeRequestId < _totalTargets)
 		{
-			Debug.Log ("In Exception");
-//				ScanButton.SetActive (true);
-		}
-
-		print ("AFTER PERFORM LOCALIZATION CALL");
-
-		if (/*!_error && !_resetCalled &&*/ _multiframeRequestId > 1 && _multiframeRequestId < _totalTargets)
-		{
-			print ("BEFORE CHECK GAZE TARGET HIT");
-
 			// Activate the next gaze target
 			StartCoroutine (CheckGazeTargetHit (_gazeTargets [_multiframeRequestId - 1]));
-
-			print ("AFTER CHECK GAZE TARGET HIT");
 		}
-//		}
 
 	}
 
-	// Event called form LookUpTrigger
+	// Event called from LookUpTrigger
 	private void HandleOnLookUpComplete()
 	{
-		print ("Look up Complete");
 		_lookedUp = true;
 		EnableScanButton ();
-		GameManager.Instance.LookTrigger.SetActive (false);
+		LookTrigger.SetActive (false);
 	}
 
 	#region XR SESSION
@@ -347,23 +282,11 @@ public class AlignmentManager : MonoBehaviour {
 		}
 		else
 		{
-			print ("Coverage Check Complete");
-
 			ScreenMessageController.Instance.ClearText ();
-
 			_coveredArea = true;
-
-
 			if (!GameManager.Instance.HasSaveDataPanel.activeSelf)
 			{
 				EnableScanButton ();
-
-//				ScanButton.SetActive (true);
-//
-//				if (GameManager.Instance.HasSaveData)
-//				{
-//					BackButton.SetActive (true);
-//				}
 			}
 		}
 	}
@@ -388,10 +311,6 @@ public class AlignmentManager : MonoBehaviour {
 		}
 		else
 		{
-			// Error
-//			bool midAlignmentError = false;
-//			_error = true;
-
 			if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.OutOfCoverage)
 			{
 				ScreenMessageController.Instance.SetText("Localization not available at this location");
@@ -399,14 +318,13 @@ public class AlignmentManager : MonoBehaviour {
 			else if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.IndoorsError)
 			{
 				ScreenMessageController.Instance.SetText("Localization Failed: Indoors Error\nResetting Game");
-				print ("INDOORS ERROR");
+//				Debug.Log ("Indoors Error");
 				_midAlignmentError = true;
-//				ScanButton.SetActive (true);
 			}
 			else if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.RequestError)
 			{
 				ScreenMessageController.Instance.SetText("Localization Failed: Request Error\nResetting Game");
-				print ("REQUEST ERROR");
+//				Debug.Log ("Request Error");
 				_midAlignmentError = true;
 			}
 			else if (status == Sturfee.Unity.XR.Core.Constants.Enums.AlignmentStatus.Error)
@@ -414,24 +332,16 @@ public class AlignmentManager : MonoBehaviour {
 				ScreenMessageController.Instance.SetText("Localization failed");
 			}
 
-//			if (midAlignmentError)
-//			{
-//
-//			}
-//			ScanButton.SetActive (true);
-
-			// Required reset for current Sturfee SDK version. Plan to fix this problem in next release.
+			// Current SDK requires reset when these errors occur. Plan to fix this problem in next release.
 			if (_midAlignmentError)
 			{
 				GameManager.Instance.ResetGame (3);
 			}
 			else
 			{
-				print ("RESETTING TO START SCREEN");
 				ResetToStartScreen ();
 			}
 		}
-
 	}
 	#endregion
 
@@ -439,38 +349,31 @@ public class AlignmentManager : MonoBehaviour {
 	{
 		if (GameManager.Instance.HasSaveData)
 		{
-			print ("HAS SAVE DATA");
-			GameManager.Instance.OnSaveDataStartScreenClick (GameManager.Instance.LoadGame); // TODO: CHANGE THIS!!!
+			GameManager.Instance.OnSaveDataStartScreenClick (_loadGame);
 		}
 		else
 		{
-			print ("TURN ON SCAN BUTTON");
-			ScanButton.SetActive (true);  // TODO: What about back button???? -> EnableScanButton???
-			print ("SCAN BUTTON ACTIVE");
+			TurnOnScanButton ();
 		}
 	}
 
-	// Enables Scan button if all prerequisites are met
+	// Turn on Scan button if all prerequisites are met
 	private bool EnableScanButton()
 	{
 		bool enableScan = !ScanButton.activeSelf && _sessionReady && _coveredArea && _lookedUp;
-
-		if (enableScan /*_sessionReady && _coveredArea && _lookedUp*/)
+		if (enableScan)
 		{
-			ScanButton.SetActive (true);
-
-			// TODO: decide to turn on back button
-			if (GameManager.Instance.HasSaveData)
-			{
-				BackButton.SetActive (true);
-			}
-
-//			return true;
+			TurnOnScanButton ();
 		}
-//		else
-//		{
-//			return false;
-//		}
 		return enableScan;
+	}
+		
+	private void TurnOnScanButton()
+	{
+		ScanButton.SetActive (true);
+		if (GameManager.Instance.HasSaveData)
+		{
+			BackButton.SetActive (true);
+		}
 	}
 }
