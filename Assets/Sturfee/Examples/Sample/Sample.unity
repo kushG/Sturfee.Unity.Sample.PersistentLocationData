@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -220,11 +220,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1490648947665182, guid: e7e790aa7c46f4caca98001cc1547eaf, type: 2}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114744001105226476, guid: e7e790aa7c46f4caca98001cc1547eaf,
-        type: 2}
-      propertyPath: PlayOnStart
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
@@ -907,10 +902,6 @@ Prefab:
       propertyPath: XrCamera
       value: 
       objectReference: {fileID: 2066439897}
-    - target: {fileID: 1083518564134558, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b7ccf499acc164e6d853879300dc4509, type: 2}
   m_IsPrefabParent: 0
@@ -952,11 +943,6 @@ Prefab:
     - target: {fileID: 4525636968697278, guid: 79787d9c686d3457b9387227ef67c6d5, type: 2}
       propertyPath: m_RootOrder
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 20036326055430920, guid: 79787d9c686d3457b9387227ef67c6d5,
-        type: 2}
-      propertyPath: m_CullingMask.m_Bits
-      value: 8192
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 79787d9c686d3457b9387227ef67c6d5, type: 2}

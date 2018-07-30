@@ -7,8 +7,11 @@ using Sturfee.Unity.XR.Core.Events;
 using Sturfee.Unity.XR.Core.Session;
 
 // Customized Alignment script
-// Combines the code from the default provided 'AlignmentManager' and 'MultiframeManager', and makes several adjustments
+// - Combines the code from the default provided 'AlignmentManager' and 'MultiframeManager'
+// - Makes several custom adjustments to the multiframe UI
+// - Also adds code to work with this sample app's UI and works in tandem with 'GameManager' script
 //
+// Multiframe UI Adjustments:
 // - Gaze Targets are adjusted to appear in one direction and one at a time, instead of to the left and right of where the player begins scanning
 // - Default left/right arrows have been changed to use an arrow that points directly towards the gaze target
 public class AlignmentManager : MonoBehaviour {
@@ -82,7 +85,6 @@ public class AlignmentManager : MonoBehaviour {
 		SturfeeEventManager.Instance.OnLocalizationLoading -= OnLocalizationLoading;
 
 		LookUpTrigger.OnUserLookedUp -= HandleOnLookUpComplete;
-
 	}
 
 	public void SetScanButton(bool loadGame)
@@ -201,7 +203,6 @@ public class AlignmentManager : MonoBehaviour {
 
 		while (!done && !_resetCalled)
 		{
-			//TODO: Exclude building/terrain layers
 			if (Physics.Raycast(XrCamera.transform.position, XrCamera.transform.forward, out hit, Mathf.Infinity, MultiframeLayerMask))
 			{
 				if (hit.transform.gameObject == target)
@@ -235,23 +236,14 @@ public class AlignmentManager : MonoBehaviour {
 	{
 		_multiframeRequestId++;
 
-//		try
-//		{
 			//If reset is called, send -1 otherwise the count
 			XRSessionManager.GetSession ().PerformLocalization ((_resetCalled) ? -1 : _totalTargets /*TargetCount*/);
-//		}
-//		catch(Exception e)
-//		{
-//			Debug.Log ("In Exception");
-////				ScanButton.SetActive (true);
-//		}
 
 		if (_multiframeRequestId > 1 && _multiframeRequestId < _totalTargets)
 		{
 			// Activate the next gaze target
 			StartCoroutine (CheckGazeTargetHit (_gazeTargets [_multiframeRequestId - 1]));
 		}
-
 	}
 
 	// Event called from LookUpTrigger

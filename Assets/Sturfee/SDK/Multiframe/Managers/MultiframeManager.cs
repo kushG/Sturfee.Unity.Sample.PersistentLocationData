@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using Sturfee.Unity.XR.Package.Utilities;
 using Sturfee.Unity.XR.Core.Session;
-using Sturfee.Unity.XR.Core.Constants;
-using Sturfee.Unity.XR.Core.Events;
+using Sturfee.Unity.XR.Core.Exceptions;
 
 
 public class MultiframeManager : MonoBehaviour, IScanManager {
@@ -180,8 +180,36 @@ public class MultiframeManager : MonoBehaviour, IScanManager {
     {
         _multiframeRequestId++;
 
-        //If reset is called, send -1 otherwise the count
-        XRSessionManager.GetSession().PerformLocalization((_resetCalled) ? -1 : TargetCount);
+        try
+        {
+            //If reset is called, send -1 otherwise the count
+            XRSessionManager.GetSession().PerformLocalization((_resetCalled) ? -1 : TargetCount);
+        }
+
+
+        catch(InvalidRequestLengthException e)
+        {
+            Debug.Log(e.Message);
+            ToastManager.Instance.ShowToastTimed("[RequestError] :: Request Length is invalid", 5);
+        }
+
+        catch (PitchRequestException e)
+        {
+            Debug.Log(e.Message);
+            ToastManager.Instance.ShowToastTimed("[RequestError] :: Please Look straight up while scanning", 5);
+        }
+
+        catch (YawRequestException e)
+        {
+            Debug.Log(e.Message);
+            ToastManager.Instance.ShowToastTimed("[RequestError] :: Yaw difference between frames is incorrect", 5);
+        }
+        catch (UserMovedRequestException e)
+        {
+            Debug.Log(e.Message);
+            ToastManager.Instance.ShowToastTimed("[RequestError] :: Please do not move while scannning.", 5);
+        }
+
 
     }
 

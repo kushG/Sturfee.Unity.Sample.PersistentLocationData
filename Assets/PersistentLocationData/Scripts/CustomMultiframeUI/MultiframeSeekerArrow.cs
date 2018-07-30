@@ -77,8 +77,7 @@ public class MultiframeSeekerArrow : MonoBehaviour {
 		{
 			_isScanning = true;                
 		}
-			
-		if (requestNum == requestLength)
+		else if (requestNum == requestLength)
 		{
 			_isScanning = false;
 		}

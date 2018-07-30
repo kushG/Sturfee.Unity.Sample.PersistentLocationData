@@ -166,7 +166,8 @@ namespace Sturfee.Unity.XR.Package.Utilities
             }
             else if (status == Core.Constants.Enums.AlignmentStatus.RequestError)
             {
-                ToastManager.Instance.ShowToastTimed("Localization Failed: Request Error");
+                //ToastManager.Instance.ShowToastTimed("Localization Failed: Request Error");
+                //Note : This should be handled by respective scanManager class
             }
             else if (status == Core.Constants.Enums.AlignmentStatus.Error)
             {
