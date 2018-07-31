@@ -14,17 +14,11 @@ public enum InteractMode
 	Tier3Placement
 }
 
-// Handles all Player UI after localization.
+// Handles all Player UI after localization
 public class PlayerUiController : MonoBehaviour {
 
 	[HideInInspector]
 	public InteractMode InteractMode;
-
-	[Header("Touch Controllers")]
-	[SerializeField]
-	private PlayerArTouchController _arViewTouchController;
-	[SerializeField]
-	private GameObject _mapTouchControlPanel;
 
 	[Header("Buttons")]
 	public GameObject SideButtons;
@@ -37,6 +31,12 @@ public class PlayerUiController : MonoBehaviour {
 	public Transform Tier1PlacementButton;
 	public Transform InteractButton;
 	public Transform SelectorIcon;
+
+	[Header("Touch Controllers")]
+	[SerializeField]
+	private PlayerArTouchController _arViewTouchController;
+	[SerializeField]
+	private GameObject _mapTouchControlPanel;
 
 	[Header("Components")]
 	[SerializeField]

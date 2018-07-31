@@ -210,6 +210,12 @@ public class MultiframeManager : MonoBehaviour, IScanManager {
             ToastManager.Instance.ShowToastTimed("[RequestError] :: Please do not move while scannning.", 5);
         }
 
+        catch(RollRequestException e)
+        {
+            Debug.Log(e.Message);
+            ToastManager.Instance.ShowToastTimed("[RequestError] :: Please do not tilt your phone while scannning.", 5);
+        }
+
 
     }
 
