@@ -1,1 +1,1 @@
-{"AccessToken":"","MemoryCacheLimit":9,"FileCacheLimit":25,"SpatialRefGps":""}
+{"AccessToken":"N/A","MemoryCacheLimit":9,"FileCacheLimit":25,"SpatialRefGps":""}

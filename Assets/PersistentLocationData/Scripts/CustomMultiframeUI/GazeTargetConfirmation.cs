@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 // Handles visuals of gaze target alignment confirmation
-public class GazeTarget : MonoBehaviour {
+public class GazeTargetConfirmation : MonoBehaviour {
 
 	[SerializeField]
 	private GameObject _alignmentRing;

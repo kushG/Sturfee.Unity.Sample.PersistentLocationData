@@ -13,7 +13,7 @@ using Sturfee.Unity.XR.Core.Session;
 //
 // Multiframe UI Adjustments:
 // - Gaze Targets are adjusted to appear in one direction and one at a time, instead of to the left and right of where the player begins scanning
-// - Default left/right arrows have been changed to use an arrow that points directly towards the gaze target
+// - Default left/right arrows have been changed to use a single arrow that points directly towards the gaze target
 public class AlignmentManager : MonoBehaviour {
 
 	public static AlignmentManager Instance;
@@ -36,7 +36,7 @@ public class AlignmentManager : MonoBehaviour {
 	private List<GameObject> _gazeTargets;
 	private int _totalTargets = 3;   			// Total # of pictures required. The actual amount of targets the user must align manually is (_totalTargets - 1)
 	private int _targetCount;					
-	private int _angle = 50;					// Angle between the gaze targets placed. The current SDK requires the angle be 50.
+	private int _angle = 50;					// Angle between the gaze targets placed. The current SDK requires the angle be 50, otherwise a 'request error' may occur.
 	private bool _isScanning; 
 	private int _multiframeRequestId;
 	private bool _resetCalled;
@@ -195,6 +195,7 @@ public class AlignmentManager : MonoBehaviour {
 		
 	private IEnumerator CheckGazeTargetHit(GameObject target)
 	{
+		// Sets one gaze target active at a time
 		_gazeTargets [_multiframeRequestId - 1].SetActive (true);
 		Arrow.GetComponent<MultiframeSeekerArrow>().SetTarget (target.transform);
 
@@ -222,7 +223,7 @@ public class AlignmentManager : MonoBehaviour {
 
 		if (!_resetCalled)
 		{
-			target.GetComponent<GazeTarget> ().TargetAlignedSuccess ();
+			target.GetComponent<GazeTargetConfirmation> ().TargetAlignedSuccess ();
 		}
 		else
 		{
