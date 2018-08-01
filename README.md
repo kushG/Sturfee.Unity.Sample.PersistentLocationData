@@ -43,13 +43,13 @@ Go to [Mapbox.com](https://mapbox.com) and [Sturfee.com](https://sturfee.com) an
 1. Go outside.
 2. Check that your phone has GPS on with a good internet connection.
 3. Open the app, and wait for the Sturfee session to initialize.
-4. Align your phone roughly perpendicular to the ground as the prompt tells you to hold your phone up.
+4. Align your phone roughly perpendicular to the ground in landscape mode as the prompt tells you to hold your phone up.
 4. Press the scan button that appears after completing this prompt as you keep the phone camera level.
-5. Move your phone in order to align the center of the screen with the circles placed in the environment.
-6. Wait for localization to complete as your location is computed using the pictures you just took.
+5. Stand still and move your phone in order to align the center of the screen with the circles placed in the environment.
+6. Wait for localization to complete as your location is computed using the pictures just taken.
 6. Once localization is complete, take note of where you are located in the mini-map view. You can also press on the 'Map View' button in the top right to get a full screen view, allowing you to move the map camera around as well.
 7. On the right hand side there are several buttons. Tap the 'Tier 1 Item Placement' button, then tap on either the ground or a building to place an object at that location. 
-8. This action calls the Sturfee server and takes a moment to register placement. A failed call could be the result of connection issues.
+8. This action calls the Sturfee server and might take a moment to register placement. A failed call could be the result of connection issues.
 9. Now tap the 'Tier 3 Item Placement' button, then drag your finger across the terrain and buildings on screen. Notice that the object can be freely dragged along these environments.
 10. This action uses preloaded building and terrain data to determine placement.
 11. Determine a desirable location for the object, then press the 'Save Placement' button at the top.
@@ -67,5 +67,5 @@ ___
 
 
 >NOTES:
->
+> Unity Version: 2017.3.0f3
 >
