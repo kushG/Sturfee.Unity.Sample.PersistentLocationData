@@ -30,6 +30,9 @@ Go to [Mapbox.com](https://mapbox.com) and [Sturfee.com](https://sturfee.com) an
 1. Open the Unity project and click on the 'SturfeeXrSession' object in the Game scene hierarchy
 2. Under the 'SturfeeXrSession' script in the Inspector view, click on the 'Provider Set' options. Make sure it is set to Custom -> ArCore Provider Set.
 3. Then make sure that the 'Play On Start' option is toggled OFF
+4. Scroll down to 'XR Settings' section and make sure  'ArCore Supported' is checked. 
+5. Add 'STURFEE_ARCORE'(if not already added) to 'Scripting Define Symbols' in 'Android tab -> Other Settings -> Configuration' section of 'Player Settings' inspector window
+
 
 **Building to iPhone (With AR Kit)**
 
